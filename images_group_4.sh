@@ -12,12 +12,12 @@ mysystem=mac
   else
     myshuf=shuf
     mygsed=sed
-  fi 
+  fi
 
 presample () {
 
 grep fullUrl tweets/scraped.txt | cut -f2- | nl | sed 's/^[ ]*//' > images/presample.txt
-  
+
 }
 
 getimagesurls () {
@@ -40,7 +40,7 @@ do
         echo "---- collecturls $i / $last ----"
 
         echo "id:"$id"|d:$date|u:"$username"|i:$file|f:$format" >> images/urls.txt
-done 
+done
 
 grep 'id:...................|' images/urls.txt | nl -nrz | sed 's/^/t:/' | tr '\t' '|' > w
 
@@ -51,7 +51,8 @@ done | sed 's/^/fl:/' > z
 
 paste z w | tr '\t' '|' | grep 'id:' > images/images_index.txt
 
-sort z | uniq > folders
+#sort z | uniq > folders
+sort z | uniq | sed 's/fl://' > folders
 while read folder
 do
     mkdir -p images/images/$folder
@@ -75,7 +76,7 @@ do
     echo "---- fetching image $n / $last ----"
     
     curl -k "$file" > images/images/"$folder"/"$n"."$ext"
-done 
+done
 
 }
 
@@ -105,7 +106,7 @@ do
     ext=$( grep $dupe images/images_index.txt | cut -d'|' -f7 | sed 's/f://' )
     rm -f images/images/"$folder"/"$pretty"."$ext"
     echo "--- removing images/images/"$folder"/"$pretty"."$ext" ---"
-done < remove 
+done < remove
 
 # remove dupes from index
 grep -vf remove images/images_index.txt > z ; mv z images/images_index.txt

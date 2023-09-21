@@ -18,7 +18,7 @@ do
         echo "---- collecturls $i / $last ----"
 
         echo "id:"$id"|d:$date|u:"$username"|i:$file|f:$format" >> images/urls.txt
-done 
+done
 
 grep 'id:...................|' images/urls.txt | nl -nrz | sed 's/^/t:/' | tr '\t' '|' > w
 
@@ -29,7 +29,8 @@ done | sed 's/^/fl:/' > z
 
 paste z w | tr '\t' '|' | grep 'id:' > images/images_index.txt
 
-sort z | uniq > folders
+#sort z | uniq > folders
+sort z | uniq | sed 's/fl://' > folders
 while read folder
 do
     mkdir -p images/images/$folder
