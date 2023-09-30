@@ -16,6 +16,8 @@ mysystem=mac
 
 presample () {
 
+mkdir -p images
+
 grep fullUrl tweets/scraped.txt | cut -f2- | nl | sed 's/^[ ]*//' > images/presample.txt
 
 }
@@ -24,7 +26,7 @@ getimagesurls () {
     
 last=$( cat images/presample.txt | wc -l | tr -dc '[0-9]' )
 
-mkdir -p images
+#mkdir -p images
 
 rm -f images/urls.txt  ### WATCH THIS!
 
@@ -109,7 +111,10 @@ do
 done < remove
 
 # remove dupes from index
-grep -vf remove images/images_index.txt > z ; mv z images/images_index.txt
+#grep -vf remove images/images_index.txt > z ; mv z images/images_index.txt
+if [[ -s remove ]]; then
+    grep -vf remove images/images_index.txt > z ; mv z images/images_index.txt
+fi
 
 # remove dupes from index again, for some reason some still remain
 cut -d'|' -f2  images/images_index.txt | cut -d':' -f2 > i
