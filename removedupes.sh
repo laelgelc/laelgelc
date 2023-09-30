@@ -27,7 +27,10 @@ do
 done < remove
 
 # remove dupes from index
-grep -vf remove images/images_index.txt > z ; mv z images/images_index.txt
+#grep -vf remove images/images_index.txt > z ; mv z images/images_index.txt
+if [[ -s remove ]]; then
+    grep -vf remove images/images_index.txt > z ; mv z images/images_index.txt
+fi
 
 # remove dupes from index again, for some reason some still remain
 cut -d'|' -f2  images/images_index.txt | cut -d':' -f2 > i
