@@ -2,7 +2,7 @@
 clear
 last=$( cat images/presample.txt | wc -l | tr -dc '[0-9]' )
 
-mkdir -p images
+#mkdir -p images
 
 rm -f images/urls.txt  ### WATCH THIS!
 
