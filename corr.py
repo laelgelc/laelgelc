@@ -3,7 +3,7 @@
 import pandas as pd
 
 # Create dataframe from file
-dataframe = pd.read_csv('data.csv')
+dataframe = pd.read_csv('images/data.csv')
 
 # Show dataframe
 #print(dataframe)
@@ -20,4 +20,5 @@ with pd.option_context('display.max_rows', None,
                        'display.precision', 8,
                        'display.width', 20000,
                        ):
-    print(matrix)
+    with open('images/correlation', 'w', encoding = 'utf8') as correlation:
+        correlation.write(str(matrix))
