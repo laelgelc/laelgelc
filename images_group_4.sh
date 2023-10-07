@@ -1,18 +1,18 @@
 #enter your group number
-group=4
+#group=4
 
 #enter the label for your system, mac or linux
-mysystem=mac
+#mysystem=mac
 #mysystem=linux
 
-  if [ "$mysystem" == mac ]
-    then
-    myshuf=gshuf
-    mygsed=gsed
-  else
-    myshuf=shuf
-    mygsed=sed
-  fi
+#  if [ "$mysystem" == mac ]
+#    then
+#    myshuf=gshuf
+#    mygsed=gsed
+#  else
+#    myshuf=shuf
+#    mygsed=sed
+#  fi
 
 presample () {
 
@@ -89,6 +89,7 @@ removedupes () {
 cut -d'|' -f3 images/images_index.txt | sed 's/id://' | sort | uniq -c | grep -v ' 1 ' | nl | sed 's/^[ ]*//' | tr '\t' ' ' | tr -s ' ' > d
 
 rm -f remove
+
 while read n maxhits id
 do
     echo "--- listing $n ---"
@@ -101,14 +102,24 @@ do
 done < d 
 
 # remove duplicate image files
-while read dupe
-do
-    pretty=$( echo $dupe | sed 's/t://' )
-    folder=$( grep $dupe images/images_index.txt | cut -d'|' -f1 | sed 's/fl://' )
-    ext=$( grep $dupe images/images_index.txt | cut -d'|' -f7 | sed 's/f://' )
-    rm -f images/images/"$folder"/"$pretty"."$ext"
-    echo "--- removing images/images/"$folder"/"$pretty"."$ext" ---"
-done < remove
+#while read dupe
+#do
+#    pretty=$( echo $dupe | sed 's/t://' )
+#    folder=$( grep $dupe images/images_index.txt | cut -d'|' -f1 | sed 's/fl://' )
+#    ext=$( grep $dupe images/images_index.txt | cut -d'|' -f7 | sed 's/f://' )
+#    rm -f images/images/"$folder"/"$pretty"."$ext"
+#    echo "--- removing images/images/"$folder"/"$pretty"."$ext" ---"
+#done < remove
+if [[ -s remove ]]; then
+    while read dupe
+    do
+        pretty=$( echo $dupe | sed 's/t://' )
+        folder=$( grep $dupe images/images_index.txt | cut -d'|' -f1 | sed 's/fl://' )
+        ext=$( grep $dupe images/images_index.txt | cut -d'|' -f7 | sed 's/f://' )
+        rm -f images/images/"$folder"/"$pretty"."$ext"
+        echo "--- removing images/images/"$folder"/"$pretty"."$ext" ---"
+    done < remove
+fi
 
 # remove dupes from index
 #grep -vf remove images/images_index.txt > z ; mv z images/images_index.txt
@@ -119,16 +130,16 @@ fi
 # remove dupes from index again, for some reason some still remain
 cut -d'|' -f2  images/images_index.txt | cut -d':' -f2 > i
 find images/images -type f | cut -d'/' -f4 | cut -d'.' -f1 > f
-cat i i f | sort | uniq -c | grep ' 2 ' | cut -c6- | grep -v '^$' | sed 's/^/t:/' > ionly
+cat i i f | sort | uniq -c | grep ' 2 ' | cut -c9- | grep -v '^$' | sed 's/^/t:/' > ionly
 grep -vf ionly images/images_index.txt > b ; mv b images/images_index.txt
 
 # remove empty image files
-find images/images -type f empty -exec rm {} +
+find images/images -type f -empty -exec rm {} +
 
 # remove empty image files from index
 cut -d'|' -f2  images/images_index.txt | cut -d':' -f2 > i
 find images/images -type f | cut -d'/' -f4 | cut -d'.' -f1 > f
-cat i i f | sort | uniq -c | grep ' 2 ' | cut -c6- | grep -v '^$' | sed 's/^/t:/' > ionly
+cat i i f | sort | uniq -c | grep ' 2 ' | cut -c9- | grep -v '^$' | sed 's/^/t:/' > ionly
 grep -vf ionly images/images_index.txt > b ; mv b images/images_index.txt
 
 }
@@ -174,22 +185,26 @@ labeltypes () {
     
 rm -f images/labels.txt
 
-last=$( cat images/images_index.txt | wc -l | tr -cd '[0-9]' )
+last=$( cat images/images_index.txt | wc -l )
 
 for i in $(eval echo {1..$last});
 do    
-    sed -n "$i"p images/images_index.txt > z
-    folder=$( cut -d'|' -f1 z | sed 's/fl://' )
-    n=$( cut -d'|' -f2 z | sed 's/t://' )
-    id=$( cut -d'|' -f3 z | sed 's/id://' )
-    date=$( cut -d'|' -f4 z | sed 's/d://' )
-    username=$( cut -d'|' -f5 z | sed 's/u://' )
-    
+    sed -n "${i}p" images/images_index.txt > z
+    folder=$(cut -d'|' -f1 z | sed 's/fl://')
+    n=$(cut -d'|' -f2 z | sed 's/t://')
+    id=$(cut -d'|' -f3 z | sed 's/id://')
+    date=$(cut -d'|' -f4 z | sed 's/d://')
+    username=$(cut -d'|' -f5 z | sed 's/u://')
+
     echo "---- labeltypes $i / $last ---"
-    
-    grep  '"description":' images/google_cloud/labels/"$folder"/"$n".txt | cut -d':' -f2 | tr -d '"' | sed -e 's/^[ ]*//' | tr '\n' ' ' | sed 's/, $//' | tr ' ' '_' | sed 's/,_/,/g' | tr -d "'" | tr '[A-Z]' '[a-z]' | sed "s/^/fl:$folder|t:$n|id:$id|d:$date|u:$username|l:/" >> images/labels.txt
+
+# Google Cloud Vision Labels in the format obtained from the original 'googlelabels' function (JSON format)
+#    grep '"description":' images/google_cloud/labels/"$folder"/"$n".txt | cut -d':' -f2 | tr -d '"' | sed -e 's/^[ ]*//' | tr '\n' ' ' | tr -d '\r' | sed 's/, $//' | tr ' ' '_' | sed 's/,_/,/g' | tr -d "'" | tr '[A-Z]' '[a-z]' | sed "s/^/fl:$folder|t:$n|id:$id|d:$date|u:$username|l:/" >> images/labels.txt
+
+# Google Cloud Vision Labels in the format obtained from the Python version of the 'googlelabels' function
+    grep 'description:' images/google_cloud/labels/"$folder"/"$n".txt | cut -d':' -f2 | tr -d '"' | sed -e 's/^[ ]*//' | tr '\n' ', ' | tr -d '\r' | sed 's/,$//' | tr ' ' '_' | sed 's/,_/,/g' | tr -d "'" | tr '[A-Z]' '[a-z]' | sed "s/^/fl:$folder|t:$n|id:$id|d:$date|u:$username|l:/" >> images/labels.txt
     echo >> images/labels.txt
-done 
+done
 
 }
 
