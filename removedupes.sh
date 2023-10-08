@@ -18,6 +18,14 @@ do
 done < d 
 
 # remove duplicate image files
+#while read dupe
+#do
+#    pretty=$( echo $dupe | sed 's/t://' )
+#    folder=$( grep $dupe images/images_index.txt | cut -d'|' -f1 | sed 's/fl://' )
+#    ext=$( grep $dupe images/images_index.txt | cut -d'|' -f7 | sed 's/f://' )
+#    rm -f images/images/"$folder"/"$pretty"."$ext"
+#    echo "--- removing images/images/"$folder"/"$pretty"."$ext" ---"
+#done < remove
 if [[ -s remove ]]; then
     while read dupe
     do
