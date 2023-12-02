@@ -1,0 +1,270 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: Creates a VPC with three Public Subnets and tree Private Subnets
+Conditions:
+  IsNVirginia:
+    !Equals [!Ref "AWS::Region", us-east-1]
+Resources:
+  VirtualPrivateCloud:
+    Type: "AWS::EC2::VPC"
+    Properties:
+      Tags:
+        - Key: Name
+          Value: Virtual Private Cloud
+      CidrBlock: 10.0.0.0/16
+      InstanceTenancy: default
+      EnableDnsSupport: true
+      EnableDnsHostnames: false
+  PublicSubnetA:
+    Type: "AWS::EC2::Subnet"
+    Properties:
+      Tags:
+        - Key: Name
+          Value: Public Subnet A
+      CidrBlock: 10.0.1.0/24
+      AvailabilityZone: !Select
+        - 0
+        - !GetAZs
+            Ref: "AWS::Region"
+      MapPublicIpOnLaunch: true
+      VpcId: !Ref VirtualPrivateCloud
+  PublicSubnetB:
+    Type: "AWS::EC2::Subnet"
+    Properties:
+      Tags:
+        - Key: Name
+          Value: Public Subnet B
+      CidrBlock: 10.0.2.0/24
+      AvailabilityZone: !Select
+        - 1
+        - !GetAZs
+            Ref: "AWS::Region"
+      MapPublicIpOnLaunch: true
+      VpcId: !Ref VirtualPrivateCloud
+  PublicSubnetC:
+    Type: "AWS::EC2::Subnet"
+    Properties:
+      Tags:
+        - Key: Name
+          Value: Public Subnet C
+      CidrBlock: 10.0.3.0/24
+      AvailabilityZone: !Select
+        - 2
+        - !GetAZs
+            Ref: "AWS::Region"
+      MapPublicIpOnLaunch: true
+      VpcId: !Ref VirtualPrivateCloud
+  PrivateSubnetA:
+    Type: "AWS::EC2::Subnet"
+    Properties:
+      Tags:
+        - Key: Name
+          Value: Private Subnet A
+      CidrBlock: 10.0.11.0/24
+      AvailabilityZone: !Select
+        - 0
+        - !GetAZs
+            Ref: "AWS::Region"
+      VpcId: !Ref VirtualPrivateCloud
+  PrivateSubnetB:
+    Type: "AWS::EC2::Subnet"
+    Properties:
+      Tags:
+        - Key: Name
+          Value: Private Subnet B
+      CidrBlock: 10.0.12.0/24
+      AvailabilityZone: !Select
+        - 1
+        - !GetAZs
+            Ref: "AWS::Region"
+      VpcId: !Ref VirtualPrivateCloud
+  PrivateSubnetC:
+    Type: "AWS::EC2::Subnet"
+    Properties:
+      Tags:
+        - Key: Name
+          Value: Private Subnet C
+      CidrBlock: 10.0.13.0/24
+      AvailabilityZone: !Select
+        - 2
+        - !GetAZs
+            Ref: "AWS::Region"
+      VpcId: !Ref VirtualPrivateCloud
+  InternetGateway:
+    Type: "AWS::EC2::InternetGateway"
+    Properties:
+      Tags:
+        - Key: Name
+          Value: Internet Gateway
+  VPCGwAttach1:
+    Type: "AWS::EC2::VPCGatewayAttachment"
+    Properties:
+      VpcId: !Ref VirtualPrivateCloud
+      InternetGatewayId: !Ref InternetGateway
+  PublicRouteTable1:
+    Type: "AWS::EC2::RouteTable"
+    Properties:
+      VpcId: !Ref VirtualPrivateCloud
+  PublicRoute1:
+    Type: "AWS::EC2::Route"
+    DependsOn: VPCGwAttach1
+    Properties:
+      DestinationCidrBlock: 0.0.0.0/0
+      RouteTableId: !Ref PublicRouteTable1
+      GatewayId: !Ref InternetGateway
+  PublicSubnetRouteTableAssociationA:
+    Type: "AWS::EC2::SubnetRouteTableAssociation"
+    Properties:
+      SubnetId: !Ref PublicSubnetA
+      RouteTableId: !Ref PublicRouteTable1
+  PublicSubnetRouteTableAssociationB:
+    Type: "AWS::EC2::SubnetRouteTableAssociation"
+    Properties:
+      SubnetId: !Ref PublicSubnetB
+      RouteTableId: !Ref PublicRouteTable1
+  PublicSubnetRouteTableAssociationC:
+    Type: "AWS::EC2::SubnetRouteTableAssociation"
+    Properties:
+      SubnetId: !Ref PublicSubnetC
+      RouteTableId: !Ref PublicRouteTable1
+  PrivateRouteTable1:
+    Type: "AWS::EC2::RouteTable"
+    Properties:
+      VpcId: !Ref VirtualPrivateCloud
+  PrivateSubnetRouteTableAssociationA:
+    Type: "AWS::EC2::SubnetRouteTableAssociation"
+    Properties:
+      SubnetId: !Ref PrivateSubnetA
+      RouteTableId: !Ref PrivateRouteTable1
+  PrivateSubnetRouteTableAssociationB:
+    Type: "AWS::EC2::SubnetRouteTableAssociation"
+    Properties:
+      SubnetId: !Ref PrivateSubnetB
+      RouteTableId: !Ref PrivateRouteTable1
+  PrivateSubnetRouteTableAssociationC:
+    Type: "AWS::EC2::SubnetRouteTableAssociation"
+    Properties:
+      SubnetId: !Ref PrivateSubnetC
+      RouteTableId: !Ref PrivateRouteTable1
+  DHCPOptions:
+    Type: "AWS::EC2::DHCPOptions"
+    Properties:
+      DomainName:
+        !If [IsNVirginia, ec2.internal, !Join ["", [!Ref "AWS::Region", .compute.internal]]]
+      DomainNameServers:
+        - AmazonProvidedDNS
+  DHCPAssoc1:
+    Type: "AWS::EC2::VPCDHCPOptionsAssociation"
+    Properties:
+      VpcId: !Ref VirtualPrivateCloud
+      DhcpOptionsId: !Ref DHCPOptions
+  NetworkACL:
+    Type: "AWS::EC2::NetworkAcl"
+    Properties:
+      VpcId: !Ref VirtualPrivateCloud
+  ACL1:
+    Type: "AWS::EC2::NetworkAclEntry"
+    Properties:
+      CidrBlock: 0.0.0.0/0
+      Egress: true
+      Protocol: -1
+      RuleAction: allow
+      RuleNumber: 100
+      NetworkAclId: !Ref NetworkACL
+  ACL2:
+    Type: "AWS::EC2::NetworkAclEntry"
+    Properties:
+      CidrBlock: 0.0.0.0/0
+      Egress: false
+      Protocol: -1
+      RuleAction: allow
+      RuleNumber: 100
+      NetworkAclId: !Ref NetworkACL
+  SubnetACLAssoc1:
+    Type: "AWS::EC2::SubnetNetworkAclAssociation"
+    Properties:
+      NetworkAclId: !Ref NetworkACL
+      SubnetId: !Ref PublicSubnetA
+  SubnetACLAssoc2:
+    Type: "AWS::EC2::SubnetNetworkAclAssociation"
+    Properties:
+      NetworkAclId: !Ref NetworkACL
+      SubnetId: !Ref PublicSubnetB
+  SubnetACLAssoc3:
+    Type: "AWS::EC2::SubnetNetworkAclAssociation"
+    Properties:
+      NetworkAclId: !Ref NetworkACL
+      SubnetId: !Ref PublicSubnetC
+  SubnetACLAssoc11:
+    Type: "AWS::EC2::SubnetNetworkAclAssociation"
+    Properties:
+      NetworkAclId: !Ref NetworkACL
+      SubnetId: !Ref PrivateSubnetA
+  SubnetACLAssoc12:
+    Type: "AWS::EC2::SubnetNetworkAclAssociation"
+    Properties:
+      NetworkAclId: !Ref NetworkACL
+      SubnetId: !Ref PrivateSubnetB
+  SubnetACLAssoc13:
+    Type: "AWS::EC2::SubnetNetworkAclAssociation"
+    Properties:
+      NetworkAclId: !Ref NetworkACL
+      SubnetId: !Ref PrivateSubnetC
+Outputs:
+  Region:
+    Description: AWS Region
+    Value: !Ref "AWS::Region"
+    Export:
+      Name: !Sub "${AWS::StackName}-Region"
+  CidrBlock:
+    Description: CIDR Block of the VPC
+    Value:
+      !GetAtt
+        - VirtualPrivateCloud
+        - CidrBlock
+    Export:
+      Name: !Sub "${AWS::StackName}-CidrBlock"
+  VirtualPrivateCloud:
+    Description: Virtual Private Cloud
+    Value: !Ref VirtualPrivateCloud
+    Export:
+      Name: !Sub "${AWS::StackName}-VirtualPrivateCloud"
+  PublicSubnetA:
+    Description: Public Subnet A
+    Value: !Ref PublicSubnetA
+    Export:
+      Name: !Sub "${AWS::StackName}-PublicSubnetA"
+  PublicSubnetB:
+    Description: Public Subnet B
+    Value: !Ref PublicSubnetB
+    Export:
+      Name: !Sub "${AWS::StackName}-PublicSubnetB"
+  PublicSubnetC:
+    Description: Public Subnet C
+    Value: !Ref PublicSubnetC
+    Export:
+      Name: !Sub "${AWS::StackName}-PublicSubnetC"
+  PrivateSubnetA:
+    Description: Private Subnet A
+    Value: !Ref PrivateSubnetA
+    Export:
+      Name: !Sub "${AWS::StackName}-PrivateSubnetA"
+  PrivateSubnetB:
+    Description: Private Subnet B
+    Value: !Ref PrivateSubnetB
+    Export:
+      Name: !Sub "${AWS::StackName}-PrivateSubnetB"
+  PrivateSubnetC:
+    Description: Private Subnet C
+    Value: !Ref PrivateSubnetC
+    Export:
+      Name: !Sub "${AWS::StackName}-PrivateSubnetC"
+  PublicRouteTable1:
+    Description: Public Route Table 1
+    Value: !Ref PublicRouteTable1
+    Export:
+      Name: !Sub "${AWS::StackName}-PublicRouteTable1"
+  PrivateRouteTable1:
+    Description: Private Route Table 1
+    Value: !Ref PrivateRouteTable1
+    Export:
+      Name: !Sub "${AWS::StackName}-PrivateRouteTable1"

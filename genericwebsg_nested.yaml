@@ -1,0 +1,121 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: Creates Security Groups for Bastion, Web Servers and Database Servers
+Parameters:
+  VPCStackName:
+    Description: Name of the stack that contains the VPC resources
+    Type: String
+    MinLength: 1
+    MaxLength: 255
+    AllowedPattern: ^[a-zA-Z][-a-zA-Z0-9]*$
+    Default: WebVPC
+Resources:
+  BastionSG:
+    Type: "AWS::EC2::SecurityGroup"
+    Properties:
+      GroupName: BastionSG
+      GroupDescription: BastionSG
+      Tags:
+        - Key: Name
+          Value: BastionSG
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 22
+          ToPort: 22
+          CidrIp: 187.189.186.5/32
+          Description: Allows SSH from Administrator
+      SecurityGroupEgress:
+        - IpProtocol: -1
+          CidrIp: 0.0.0.0/0
+          Description: Allows irrestrict IPv4 outbound traffic
+        - IpProtocol: -1
+          CidrIpv6: ::/0
+          Description: Allows irrestrict IPv6 outbound traffic
+      VpcId: !ImportValue
+        Fn::Sub: "${VPCStackName}-VirtualPrivateCloud"
+  WebSG:
+    Type: "AWS::EC2::SecurityGroup"
+    Properties:
+      GroupName: WebSG
+      GroupDescription: WebSG
+      Tags:
+        - Key: Name
+          Value: WebSG
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+          CidrIp: 0.0.0.0/0
+          Description: Allows HTTP from IPv4 Users
+        - IpProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+          CidrIpv6: ::/0
+          Description: Allows HTTP from IPv6 Users
+        - IpProtocol: tcp
+          FromPort: 443
+          ToPort: 443
+          CidrIp: 0.0.0.0/0
+          Description: Allows HTTP from IPv4 Users
+        - IpProtocol: tcp
+          FromPort: 443
+          ToPort: 443
+          CidrIpv6: ::/0
+          Description: Allows HTTP from IPv6 Users
+      SecurityGroupEgress:
+        - IpProtocol: -1
+          CidrIp: 0.0.0.0/0
+          Description: Allows irrestrict IPv4 outbound traffic
+        - IpProtocol: -1
+          CidrIpv6: ::/0
+          Description: Allows irrestrict IPv6 outbound traffic
+      VpcId: !ImportValue
+        Fn::Sub: "${VPCStackName}-VirtualPrivateCloud"
+  WebSGIngress:
+    Type: "AWS::EC2::SecurityGroupIngress"
+    Properties:
+      GroupId: !GetAtt WebSG.GroupId
+      IpProtocol: tcp
+      FromPort: 22
+      ToPort: 22
+      SourceSecurityGroupId: !GetAtt BastionSG.GroupId
+  DBSG:
+    Type: "AWS::EC2::SecurityGroup"
+    Properties:
+      GroupName: DBSG
+      GroupDescription: DBSG
+      Tags:
+        - Key: Name
+          Value: DBSG
+      SecurityGroupEgress:
+        - IpProtocol: -1
+          CidrIp: 0.0.0.0/0
+          Description: Allows irrestrict IPv4 outbound traffic
+        - IpProtocol: -1
+          CidrIpv6: ::/0
+          Description: Allows irrestrict IPv6 outbound traffic
+      VpcId: !ImportValue
+        Fn::Sub: "${VPCStackName}-VirtualPrivateCloud"
+  DBSGIngress:
+    Type: "AWS::EC2::SecurityGroupIngress"
+    Properties:
+      GroupId: !GetAtt DBSG.GroupId
+      IpProtocol: tcp
+      FromPort: 3306
+      ToPort: 3306
+      SourceSecurityGroupId: !GetAtt WebSG.GroupId
+Outputs:
+  BastionSG:
+    Description: Bastion Security Group
+    Value: !Ref BastionSG
+    Export:
+      Name: !Sub "${AWS::StackName}-BastionSG"
+  WebSG:
+    Description: Web Server Security Group
+    Value: !Ref WebSG
+    Export:
+      Name: !Sub "${AWS::StackName}-WebSG"
+  DBSG:
+    Description: Database Security Group
+    Value: !Ref DBSG
+    Export:
+      Name: !Sub "${AWS::StackName}-DBSG"
