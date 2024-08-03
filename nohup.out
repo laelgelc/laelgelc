@@ -1,0 +1,38 @@
+[I 2024-08-03 21:08:46.638 ServerApp] jupyter_lsp | extension was successfully linked.
+[I 2024-08-03 21:08:46.641 ServerApp] jupyter_server_terminals | extension was successfully linked.
+[I 2024-08-03 21:08:46.644 ServerApp] jupyterlab | extension was successfully linked.
+[I 2024-08-03 21:08:46.798 ServerApp] notebook_shim | extension was successfully linked.
+[I 2024-08-03 21:08:46.808 ServerApp] notebook_shim | extension was successfully loaded.
+[I 2024-08-03 21:08:46.810 ServerApp] jupyter_lsp | extension was successfully loaded.
+[I 2024-08-03 21:08:46.810 ServerApp] jupyter_server_terminals | extension was successfully loaded.
+[I 2024-08-03 21:08:46.811 LabApp] JupyterLab extension loaded from /home/ubuntu/my_env/lib/python3.12/site-packages/jupyterlab
+[I 2024-08-03 21:08:46.811 LabApp] JupyterLab application directory is /home/ubuntu/my_env/share/jupyter/lab
+[I 2024-08-03 21:08:46.811 LabApp] Extension Manager is 'pypi'.
+[I 2024-08-03 21:08:46.843 ServerApp] jupyterlab | extension was successfully loaded.
+[I 2024-08-03 21:08:46.844 ServerApp] Serving notebooks from local directory: /home/ubuntu
+[I 2024-08-03 21:08:46.844 ServerApp] Jupyter Server 2.14.2 is running at:
+[I 2024-08-03 21:08:46.844 ServerApp] http://ip-172-31-12-187:8888/lab?token=50c24d0d8ec1d4538a4b7f755f35182db0db241625ed90f2
+[I 2024-08-03 21:08:46.844 ServerApp]     http://127.0.0.1:8888/lab?token=50c24d0d8ec1d4538a4b7f755f35182db0db241625ed90f2
+[I 2024-08-03 21:08:46.844 ServerApp] Use Control-C to stop this server and shut down all kernels (twice to skip confirmation).
+[C 2024-08-03 21:08:46.846 ServerApp] 
+    
+    To access the server, open this file in a browser:
+        file:///home/ubuntu/.local/share/jupyter/runtime/jpserver-1559-open.html
+    Or copy and paste one of these URLs:
+        http://ip-172-31-12-187:8888/lab?token=50c24d0d8ec1d4538a4b7f755f35182db0db241625ed90f2
+        http://127.0.0.1:8888/lab?token=50c24d0d8ec1d4538a4b7f755f35182db0db241625ed90f2
+[I 2024-08-03 21:08:46.859 ServerApp] Skipped non-installed server(s): bash-language-server, dockerfile-language-server-nodejs, javascript-typescript-langserver, jedi-language-server, julia-language-server, pyright, python-language-server, python-lsp-server, r-languageserver, sql-language-server, texlab, typescript-language-server, unified-language-server, vscode-css-languageserver-bin, vscode-html-languageserver-bin, vscode-json-languageserver-bin, yaml-language-server
+[I 2024-08-03 21:10:24.185 ServerApp] 302 GET / (@189.120.75.26) 0.43ms
+[W 2024-08-03 21:10:24.884 LabApp] Could not determine jupyterlab build status without nodejs
+[W 2024-08-03 21:10:32.612 ServerApp] Notebook laelgelc/Cheat_sheet.ipynb is not trusted
+[I 2024-08-03 21:10:32.924 ServerApp] Kernel started: a2653f83-596b-4c2d-b7cd-2ad0d187b6a0
+[I 2024-08-03 21:10:33.363 ServerApp] Connecting to kernel a2653f83-596b-4c2d-b7cd-2ad0d187b6a0.
+[I 2024-08-03 21:10:33.385 ServerApp] Connecting to kernel a2653f83-596b-4c2d-b7cd-2ad0d187b6a0.
+[I 2024-08-03 21:10:33.404 ServerApp] Connecting to kernel a2653f83-596b-4c2d-b7cd-2ad0d187b6a0.
+[I 2024-08-03 21:12:33.125 ServerApp] Saving file at /laelgelc/Cheat_sheet.ipynb
+[W 2024-08-03 21:12:33.126 ServerApp] Notebook laelgelc/Cheat_sheet.ipynb is not trusted
+[I 2024-08-03 21:13:47.774 ServerApp] Saving file at /laelgelc/Cheat_sheet.ipynb
+[W 2024-08-03 21:13:47.775 ServerApp] Notebook laelgelc/Cheat_sheet.ipynb is not trusted
+[I 2024-08-03 21:13:57.120 ServerApp] Kernel shutdown: a2653f83-596b-4c2d-b7cd-2ad0d187b6a0
+[I 2024-08-03 21:14:04.735 ServerApp] Shutting down on /api/shutdown request.
+[I 2024-08-03 21:14:04.735 ServerApp] Shutting down 4 extensions
