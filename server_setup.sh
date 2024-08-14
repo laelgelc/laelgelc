@@ -65,6 +65,7 @@ requests \
 scipy \
 truthbrush \
 webvtt-py \
+wordcloud \
 yt-dlp
 python -m ipykernel install --user --name=my_env
 
