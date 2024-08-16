@@ -58,6 +58,7 @@ numpy \
 openai \
 openpyxl \
 pandas \
+plotly \
 pySmartDL \
 pyspark \
 python-dotenv \
