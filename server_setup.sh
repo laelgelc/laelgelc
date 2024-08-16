@@ -44,6 +44,7 @@ beautifulsoup4 \
 boto3 \
 dash \
 demoji \
+folium \
 gensim \
 gogettr \
 google-cloud-storage \
@@ -65,6 +66,7 @@ pyspark \
 python-dotenv \
 requests \
 scipy \
+seaborn \
 truthbrush \
 webvtt-py \
 wordcloud \
