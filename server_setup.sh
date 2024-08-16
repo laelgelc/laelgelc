@@ -42,6 +42,7 @@ source "$HOME"/my_env/bin/activate
 pip install \
 beautifulsoup4 \
 boto3 \
+dash \
 demoji \
 gensim \
 gogettr \
