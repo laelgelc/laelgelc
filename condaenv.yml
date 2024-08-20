@@ -4,7 +4,9 @@ name: my_env
 dependencies:
   - beautifulsoup4
   - boto3
+  - dash
   - demoji
+  - folium
   - gensim
 #  - gogettr
   - google-cloud-storage
@@ -26,6 +28,8 @@ dependencies:
   - python-dotenv
   - requests
   - scipy
+  - seaborn
 #  - truthbrush
 #  - webvtt-py
+  - wordcloud
   - yt-dlp
