@@ -7,6 +7,7 @@
 # conda env create -f condaenv.yml
 # conda activate my_env
 # pip install gogettr truthbrush webvtt-py
+# conda list
 # Regarding Google Cloud Python APIs, please check https://github.com/googleapis/google-cloud-python
 name: my_env
 dependencies:
