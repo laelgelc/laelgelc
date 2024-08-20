@@ -65,6 +65,7 @@ pySmartDL \
 pyspark \
 python-dotenv \
 requests \
+scikit-learn \
 scipy \
 seaborn \
 truthbrush \
