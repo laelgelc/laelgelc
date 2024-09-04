@@ -44,4 +44,5 @@ dependencies:
 #  - truthbrush
 #  - webvtt-py
   - wordcloud
+  - yake
   - yt-dlp

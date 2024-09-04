@@ -7,7 +7,7 @@ sudo apt update && sudo apt upgrade -y || { echo "Failed to update and upgrade p
 
 # Installing necessary packages
 sudo snap install aws-cli --classic
-sudo apt install -y python3-pip python3-venv ripgrep html2text zip unzip pipx ffmpeg
+sudo apt install -y python3-pip python3-venv xsel ripgrep html2text zip unzip pipx ffmpeg
 
 # Creating directory for TreeTagger
 mkdir -p "$HOME"/treetagger/
@@ -71,6 +71,7 @@ seaborn \
 truthbrush \
 webvtt-py \
 wordcloud \
+yake \
 yt-dlp
 python -m ipykernel install --user --name=my_env
 
