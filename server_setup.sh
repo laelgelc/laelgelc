@@ -61,8 +61,11 @@ openai \
 openpyxl \
 pandas \
 plotly \
+PyMuPDF \
+pypdf \
 pySmartDL \
 pyspark \
+python-docx \
 python-dotenv \
 requests \
 scikit-learn \
