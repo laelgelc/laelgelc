@@ -123,6 +123,11 @@ alias pbpaste='xsel --clipboard --output'
 # Created by `pipx` on 2024-06-09 14:13:05
 export PATH="$PATH:/home/eyamrog/.local/bin"
 
+# Workaround to allow deactivation of 'my_env' on VS Code's terminal
+if [ -f ~/my_env/bin/activate ]; then
+    source ~/my_env/bin/activate
+fi
+
 # The following lines add TreeTagger to the PATH variable
 export PATH=$PATH:/home/eyamrog/treetagger/cmd
 export PATH=$PATH:/home/eyamrog/treetagger/bin
