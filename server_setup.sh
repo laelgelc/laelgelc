@@ -79,4 +79,4 @@ yt-dlp
 python -m ipykernel install --user --name=my_env
 
 # Rebooting the system for kernel's update
-sudo reboot
+#sudo reboot
