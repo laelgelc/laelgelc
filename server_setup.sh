@@ -71,6 +71,7 @@ requests \
 scikit-learn \
 scipy \
 seaborn \
+selenium \
 truthbrush \
 webvtt-py \
 wordcloud \
