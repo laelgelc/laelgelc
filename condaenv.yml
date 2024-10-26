@@ -4,7 +4,7 @@
 # cd Downloads
 # conda env list
 # conda remove --name my_env --all
-# conda env create -f condaenv.yml
+# conda env create --file=condaenv.yml
 # conda activate my_env
 # pip install gogettr truthbrush webvtt-py pymupdf
 # conda list
