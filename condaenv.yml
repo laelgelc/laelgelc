@@ -45,6 +45,7 @@ dependencies:
   - scipy
   - seaborn
   - selenium
+  - tqdm
 #  - truthbrush
 #  - webvtt-py
   - wordcloud

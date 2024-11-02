@@ -72,6 +72,7 @@ scikit-learn \
 scipy \
 seaborn \
 selenium \
+tqdm \
 truthbrush \
 webvtt-py \
 wordcloud \
