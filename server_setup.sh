@@ -74,6 +74,7 @@ seaborn \
 selenium \
 tqdm \
 truthbrush \
+validators \
 webvtt-py \
 wordcloud \
 yake \
