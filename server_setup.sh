@@ -37,9 +37,11 @@ echo "export PATH=\$PATH:/home/ubuntu/treetagger/bin" >> "$HOME"/.bashrc
 # Setting up Python virtual environment
 # Regarding Google Cloud Python APIs, please check https://github.com/googleapis/google-cloud-python
 cd "$HOME"
+python3 -m pip install --upgrade pip
 python3 -m venv my_env
 source "$HOME"/my_env/bin/activate
 pip install \
+#--upgrade \
 beautifulsoup4 \
 boto3 \
 dash \
