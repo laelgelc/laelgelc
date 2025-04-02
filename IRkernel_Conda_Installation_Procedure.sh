@@ -19,6 +19,7 @@ conda list
 
 install.packages("IRkernel")
 IRkernel::installspec(name = 'my_r_env', user = TRUE) # Registers the kernel for Jupyter for the current user
+#IRkernel::installspec(name = 'my_r_env', user = FALSE) # Registers the kernel for Jupyter system-wide
 
 # Check the Jupyter kernels
 jupyter kernelspec list
