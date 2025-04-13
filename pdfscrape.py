@@ -1,3 +1,6 @@
+# Usage
+# python pdfscrape.py filename.pdf
+
 import os
 import re
 import logging

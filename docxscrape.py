@@ -1,3 +1,6 @@
+# Usage
+# python docxscrape.py filename.docx
+
 import os
 import re
 import logging
