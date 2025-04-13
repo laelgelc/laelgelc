@@ -46,4 +46,3 @@ if __name__ == "__main__":
     parser.add_argument('url', type=str, help="Web page's URL")
     args = parser.parse_args()
     main(args.file_id, args.url)
-    
