@@ -1,5 +1,25 @@
 # Usage
-# python chatgptreview.py file.txt
+# python chatgptreview.py t000194_tokenised.txt
+#
+# Manually edit the text file according to the following format:
+# Text ID: t000000
+# 
+# Title: The Pedagogy of Multiliteracies Applied to English Teaching
+# 
+# Section: Introduction
+# The teaching of foreign languages ...
+# The concept of multiliteracies, ...
+# <other paragraphs>
+# 
+# Section: Body
+# The Pedagogy of Multiliteracies is ...
+# The Pedagogy of Multiliteracies ...
+# <other paragraphs>
+# 
+# Section: Conclusion
+# The Pedagogy of Multiliteracies emerges ...
+# The creation of fanfictions within ...
+# <other paragraphs>
 
 # Importing the required libraries
 import argparse
