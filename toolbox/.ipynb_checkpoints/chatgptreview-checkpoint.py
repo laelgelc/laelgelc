@@ -21,7 +21,7 @@
 # The creation of fanfictions within ...
 # <other paragraphs>
 
-# Import the required libraries
+# Importing the required libraries
 import argparse
 from dotenv import load_dotenv
 import openai
@@ -32,7 +32,7 @@ from tqdm import tqdm
 import time
 
 def main(txt_file):
-    '''Get a text file and review its paragraphs with ChatGPT.'''
+    """Get a text file and review its paragraphs with ChatGPT."""
     try:
         # Check if the file exists
         if not os.path.isfile(txt_file):
@@ -47,14 +47,14 @@ def main(txt_file):
         df_filename2 = f"{filename}_df2"
         chatgpt_model = 'gpt-4.1'
 
-        # Set up logging
+        # Setting up logging
         logging.basicConfig(
             level=logging.INFO,
             format='%(asctime)s - %(levelname)s - %(message)s',
             filename=log_filename
         )
 
-        # Import the text into a DataFrame
+        # Importing the text into a DataFrame
         text_id = None
         title = None
         section = None
@@ -67,23 +67,23 @@ def main(txt_file):
                 line = ' '.join(line.split())  # Removing duplicated spaces
                 line = line.strip()
 
-                # Capture 'Text ID'
+                # Capturing 'Text ID'
                 if line.startswith('Text ID:'):
                     text_id = line.split(': ')[1]
                     logging.info(f"Captured Text ID: {text_id}")
 
-                # Capture 'Title'
+                # Capturing 'Title'
                 elif line.startswith('Title:'):
                     title = line.split(': ')[1]
                     logging.info(f"Captured Title: {title}")
 
-                # Capture 'Section'
+                # Capturing 'Section'
                 elif line.startswith('Section:'):
                     section = line.split(': ')[1]
                     paragraph_count = 0  # Resetting paragraph count for new section
                     logging.info(f"Starting new section: {section}")
 
-                # Capture 'Paragraph Text'
+                # Capturing 'Paragraph Text'
                 elif line:
                     paragraph_count += 1
                     data.append({
@@ -95,14 +95,14 @@ def main(txt_file):
                     })
                     logging.info(f"Captured Paragraph {paragraph_count} in Section: {section}")
 
-        # Create DataFrame
+        # Creating DataFrame
         df_text = pd.DataFrame(data)
         logging.info('DataFrame created successfully')
 
-        # Export to a file
+        # Exporting to a file
         df_text.to_json(f"{df_filename1}.jsonl", orient='records', lines=True)
 
-        # Revise the paragraphs with ChatGPT
+        # Revising the paragraphs with ChatGPT
         chatgpt_prompt = ('Dear ChatGPT, please improve the writing of the following passage of a research article '
                           'considering the generally accepted standards of English for Academic Purposes. It is very '
                           'important that you are as objective, scientific and non-metaphorical as you can be. Please keep '
@@ -136,22 +136,21 @@ def main(txt_file):
             return None
 
         def process_text(text, prompt_template):
-            try:
-                paragraphs = text.split('\n')
-                processed_paragraphs = []
-                for paragraph in paragraphs:
+            paragraphs = text.split('\n')
+            processed_paragraphs = []
+            for paragraph in paragraphs:
+                try:
                     prompt = prompt_template + paragraph
                     processed_paragraph = get_completion(prompt)
                     if processed_paragraph:
                         processed_paragraphs.append(processed_paragraph)
                     else:
                         processed_paragraphs.append(paragraph)
-                return '\n'.join(processed_paragraphs)
-            except Exception as e:
-                logging.error(f"Error improving text: {e}")
-                return text  # Return original text if there's an error
+                except Exception as e:
+                    logging.error(f"Error processing paragraph: {e}")
+                    processed_paragraphs.append(paragraph)
+            return '\n'.join(processed_paragraphs)
 
-        logging.info("Improving text using ChatGPT...")
         processed_texts = []
         for index, row in tqdm(df_text.iterrows(), total=len(df_text), desc='Processing texts'):
             prompt_template = chatgpt_prompt + '\n'
@@ -159,7 +158,7 @@ def main(txt_file):
 
         df_text['Text Paragraph ChatGPT'] = processed_texts
 
-        # Export to a file
+        # Exporting to a file
         df_text.to_json(f"{df_filename2}.jsonl", orient='records', lines=True)
         df_text.to_excel(f"{df_filename2}.xlsx", index=False)
 
