@@ -37,50 +37,11 @@ echo "export PATH=\$PATH:/home/ubuntu/treetagger/bin" >> "$HOME"/.bashrc
 # Setting up Python virtual environment
 # Regarding Google Cloud Python APIs, please check https://github.com/googleapis/google-cloud-python
 cd "$HOME"
-python3 -m pip install --upgrade pip
+#python3 -m pip install --upgrade pip
 python3 -m venv my_env
 source "$HOME"/my_env/bin/activate
-pip install \
-#--upgrade \
-beautifulsoup4 \
-boto3 \
-dash \
-demoji \
-folium \
-gensim \
-gogettr \
-google-cloud-storage \
-google-cloud-translate \
-google-cloud-videointelligence \
-google-cloud-vision \
-ipython \
-jupyterlab \
-lxml \
-matplotlib \
-nltk \
-numpy \
-openai \
-openpyxl \
-pandas \
-plotly \
-PyMuPDF \
-pypdf \
-pySmartDL \
-pyspark \
-python-docx \
-python-dotenv \
-requests \
-scikit-learn \
-scipy \
-seaborn \
-selenium \
-tqdm \
-truthbrush \
-validators \
-webvtt-py \
-wordcloud \
-yake \
-yt-dlp
+pip install -r "$HOME"/laelgelc/my_env.req
+#pip install --upgrade -r "$HOME"/laelgelc/my_env.req
 python -m ipykernel install --user --name=my_env
 
 # Rebooting the system for kernel's update
