@@ -47,5 +47,10 @@ pip install -r "$HOME"/work/laelgelc/my_env.req
 #pip install --upgrade -r "$HOME"/work/laelgelc/my_env.req
 python -m ipykernel install --user --name=my_env
 
+# Setting up 'git' global parameters
+#git config --global --list
+git config --global user.name "Rogério Yamada"
+git config --global user.email eyamrog@gmail.com
+
 # Rebooting the system for kernel's update
 #sudo reboot
