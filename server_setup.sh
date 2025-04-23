@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Create a directory named 'work' in the user's home directory and clone the 'laelgelc' repository in it:
+# eyamrog@Rog-ASUS:~/work$ clone https://github.com/laelgelc/laelgelc.git
+
 clear
 
 # Updating and upgrading the system
@@ -40,8 +43,8 @@ cd "$HOME"
 #python3 -m pip install --upgrade pip
 python3 -m venv my_env
 source "$HOME"/my_env/bin/activate
-pip install -r "$HOME"/laelgelc/my_env.req
-#pip install --upgrade -r "$HOME"/laelgelc/my_env.req
+pip install -r "$HOME"/work/laelgelc/my_env.req
+#pip install --upgrade -r "$HOME"/work/laelgelc/my_env.req
 python -m ipykernel install --user --name=my_env
 
 # Rebooting the system for kernel's update
