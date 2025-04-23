@@ -1,7 +1,9 @@
 #!/bin/bash
 
 # Create a directory named 'work' in the user's home directory and clone the 'laelgelc' repository in it:
-# eyamrog@Rog-ASUS:~/work$ clone https://github.com/laelgelc/laelgelc.git
+# ubuntu@ip-172-31-43-202:~$ mkdir work
+# ubuntu@ip-172-31-43-202:~$ cd work
+# ubuntu@ip-172-31-43-202:~/work$ git clone https://github.com/laelgelc/laelgelc.git
 
 clear
 
