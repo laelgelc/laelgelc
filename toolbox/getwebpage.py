@@ -14,9 +14,12 @@ def main(file_id, url):
         return
 
     http = requests.Session()
+    # Obtain the 'User-Agent' at 'https://httpbin.org/headers'
+    # Setting up the 'User-Agent' may not prevent websites from restricting automated access and returning a 403 Forbidden error
+    headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Safari/537.36 Edg/135.0.0.0'}
     try:
         # Fetch the web page with a timeout
-        response = http.get(url, timeout=10)
+        response = http.get(url, headers=headers, timeout=10)
         response.raise_for_status()  # Raise an HTTPError for bad responses
 
         # Save the HTML content to a file
