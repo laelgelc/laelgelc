@@ -4,6 +4,7 @@
 import argparse
 import validators
 from bs4 import BeautifulSoup
+import time
 from selenium import webdriver
 from selenium.webdriver.edge.service import Service
 from selenium.webdriver.common.by import By
@@ -30,7 +31,21 @@ def main(file_id, url):
         
         # Wait for page to load (adjust as needed for better stability)
         wait = WebDriverWait(driver, 10)
-        wait.until(EC.presence_of_element_located((By.TAG_NAME, 'body')))
+        #time.sleep(15)  # Waits for 15 seconds
+        #wait.until(EC.presence_of_element_located((By.TAG_NAME, 'body')))
+
+        # Extra reliability check: Wait until the page source stops changing
+        max_wait_time = 30  # Max time in seconds
+        start_time = time.time()
+        previous_html = ""
+        while True:
+            current_html = driver.page_source
+            if current_html == previous_html or time.time() - start_time > max_wait_time:
+                break  # Exit loop if page stops changing or max wait time is exceeded
+            previous_html = current_html
+            time.sleep(2)  # Short delay before checking again
+        
+        # Now, the page is fully loaded - extract content!
         
         # Get the full page source
         page_source = driver.page_source
