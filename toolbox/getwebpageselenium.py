@@ -37,7 +37,7 @@ def main(file_id, url):
         # Extra reliability check: Wait until the page source stops changing
         max_wait_time = 30  # Max time in seconds
         start_time = time.time()
-        previous_html = ""
+        previous_html = ''
         while True:
             current_html = driver.page_source
             if current_html == previous_html or time.time() - start_time > max_wait_time:
