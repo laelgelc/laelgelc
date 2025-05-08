@@ -51,7 +51,7 @@ def main(txt_file):
         with open(output_filename1, 'w', encoding='utf-8') as file:
             file.write(notes)
 
-        logging.info(f"AI-generated text saved to '{output_filename2}'")
+        logging.info(f"Cleaned up notes saved to '{output_filename1}'")
 
         # Define ChatGPT prompt
         chatgpt_prompt = ('Dear ChatGPT, please write a piece of academic text based on the following notes considering '
