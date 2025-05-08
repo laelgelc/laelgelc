@@ -113,7 +113,7 @@ def main(txt_file):
 
         openai.api_key = os.environ.get('OPENAI_API_KEY', '')
         if not openai.api_key:
-            raise EnvironmentError("OPENAI_API_KEY is not set in the environment variables.")
+            raise EnvironmentError('OPENAI_API_KEY is not set in the environment variables.')
 
         def get_completion(prompt, model=chatgpt_model, max_retries=5):
             for attempt in range(max_retries):
@@ -132,7 +132,7 @@ def main(txt_file):
                 except Exception as e:
                     logging.error(f"Error querying ChatGPT: {e}")
                     return None
-            logging.error("Max retries exceeded.")
+            logging.error('Max retries exceeded.')
             return None
 
         def process_text(text, prompt_template):
@@ -151,7 +151,7 @@ def main(txt_file):
                 logging.error(f"Error improving text: {e}")
                 return text  # Return original text if there's an error
 
-        logging.info("Improving text using ChatGPT...")
+        logging.info('Improving text using ChatGPT...')
         processed_texts = []
         for index, row in tqdm(df_text.iterrows(), total=len(df_text), desc='Processing texts'):
             prompt_template = chatgpt_prompt + '\n'
@@ -171,8 +171,8 @@ def main(txt_file):
         logging.error(f"Unexpected error occurred: {e}")
         print(f"An unexpected error occurred: {e}")
 
-if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="Get a text file and review its paragraphs with ChatGPT.")
-    parser.add_argument('txt_file', type=str, help="Text file filename")
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser(description='Get a text file and review its paragraphs with ChatGPT.')
+    parser.add_argument('txt_file', type=str, help='Text file filename')
     args = parser.parse_args()
     main(args.txt_file)
