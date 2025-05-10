@@ -1,7 +1,7 @@
 # Usage
-# python chatgptwriting.py methodology_notes1.txt
+# python chatgptgeneric.py writing.prompt methodology_notes1.txt
 #
-# Output: cleaned up notes file; AI-composed paragraph file; log file
+# Output: cleaned up notes file; AI response file; log file
 
 # Import the required libraries
 import argparse
@@ -11,14 +11,16 @@ import os
 import logging
 import time
 
-def main(txt_file):
+def main(prompt_file, txt_file):
     '''Generate an academic paragraph from notes using ChatGPT.'''
     try:
-        # Check if the file exists
+        # Check if both files exist
+        if not os.path.isfile(prompt_file):
+            raise FileNotFoundError(f"The prompt file '{prompt_file}' does not exist.")
         if not os.path.isfile(txt_file):
-            raise FileNotFoundError(f"The file '{txt_file}' does not exist.")
+            raise FileNotFoundError(f"The text file '{txt_file}' does not exist.")
 
-        # Define input varibles
+        # Define input variables
         filename = txt_file.lower().replace(' ', '_').split('.')[0]
         output_filename1 = f"{filename}_cleaned_up.txt"
         output_filename2 = f"{filename}_ai_composed.txt"
@@ -31,34 +33,32 @@ def main(txt_file):
             filename=f"{filename}.log"
         )
 
+        # Read prompt from the first file
+        logging.info(f'Reading prompt from {prompt_file}')
+        with open(prompt_file, 'r', encoding='utf-8') as file:
+            chatgpt_prompt = file.read().strip()
+
+        if not chatgpt_prompt:
+            raise ValueError(f"The prompt file '{prompt_file}' is empty or contains only whitespace.")
+
         # Clean up notes before sending them to ChatGPT
         def preprocess_notes(notes):
-            # Process each line individually: strip leading/trailing spaces and remove duplicated spaces
             cleaned_lines = [' '.join(line.split()) for line in notes.splitlines() if line.strip()]
-        
-            # Preserve structure by joining lines with newline characters
             return '\n'.join(cleaned_lines)
 
-        # Read notes from the file
-        logging.info('Reading notes from file')
+        # Read notes from the second file
+        logging.info(f'Reading notes from {txt_file}')
         with open(txt_file, 'r', encoding='utf-8') as file:
             notes = preprocess_notes(file.read())
 
         if not notes:
-            raise ValueError('The file is empty or contains only whitespace.')
+            raise ValueError(f"The text file '{txt_file}' is empty or contains only whitespace.")
 
         # Save cleaned-up notes to file
         with open(output_filename1, 'w', encoding='utf-8') as file:
             file.write(notes)
 
-        logging.info(f"Cleaned up notes saved to '{output_filename1}'")
-
-        # Define ChatGPT prompt
-        chatgpt_prompt = ('Dear ChatGPT, please write a piece of academic text based on the following notes considering '
-                          'the generally accepted standards of English for Academic Purposes. It is very important that '
-                          'you are as objective, scientific and non-metaphorical as you can be. Please keep '
-                          'the text within a single paragraph - do not split it into multiple paragraphs. Also, '
-                          'do not acknowledge this prompt - just provide the paragraph straightaway.')
+        logging.info(f"Cleaned-up notes saved to '{output_filename1}'")
 
         # Load OpenAI API key
         load_dotenv()
@@ -112,6 +112,7 @@ def main(txt_file):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Generate an academic paragraph from notes using ChatGPT.')
+    parser.add_argument('prompt_file', type=str, help='Prompt file filename')
     parser.add_argument('txt_file', type=str, help='Text file filename')
     args = parser.parse_args()
-    main(args.txt_file)
+    main(args.prompt_file, args.txt_file)
