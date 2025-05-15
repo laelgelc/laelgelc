@@ -1,0 +1,15 @@
+{
+    "files.eol": "\n",
+    "python.condaPath": "C:\\Users\\eyamr\\anaconda3\\Scripts\\conda-script.py",
+    "python.defaultInterpreterPath": "C:\\Users\\eyamr\\anaconda3\\envs\\my_env\\python.exe",
+    "python.experiments.optInto": [
+        "pythonTerminalEnvVarActivation"
+    ],
+    "python.pythonPath": "C:\\Users\\eyamr\\anaconda3\\envs\\my_env\\python.exe",
+    "python.terminal.activateEnvInCurrentTerminal": true,
+    "python.terminal.activateEnvironment": true,
+    "terminal.integrated.copyOnSelection": true,
+    "terminal.integrated.env.windows": {
+        "Path": "C:\\Program Files\\Git\\cmd;${env:Path}"
+    }
+}

@@ -1,0 +1,10 @@
+{
+    "python.terminal.activateEnvironment": false,
+    "remote.autoForwardPortsSource": "hybrid",
+    "files.eol": "\n",
+    "terminal.integrated.copyOnSelection": true,
+    "remote.SSH.remotePlatform": {
+        "cl_st1_ph5_eyamrog": "linux",
+        "cl_st1_marc_tim": "linux"
+    }
+}
