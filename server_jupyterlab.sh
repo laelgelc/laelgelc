@@ -1,4 +1,5 @@
 #!/bin/bash
+# Use 'https://checkip.amazonaws.com/' to check your computer's IP address
 
 source "$HOME"/my_env/bin/activate
 nohup jupyter-lab --ip 0.0.0.0 --no-browser --allow-root --ServerApp.root_dir="$HOME" &
