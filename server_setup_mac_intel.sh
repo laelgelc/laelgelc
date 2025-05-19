@@ -37,7 +37,7 @@ echo >> "$HOME"/.zshrc
 echo "# The following lines add TreeTagger to the PATH variable" >> "$HOME"/.zshrc
 echo "export PATH=\$PATH:/Users/eyamrog/treetagger/cmd" >> "$HOME"/.zshrc
 echo "export PATH=\$PATH:/Users/eyamrog/treetagger/bin" >> "$HOME"/.zshrc
-source "$HOME"/.zshrc
+#source "$HOME"/.zshrc
 
 # Setting up Python virtual environment
 # Regarding Google Cloud Python APIs, please check https://github.com/googleapis/google-cloud-python

@@ -38,7 +38,7 @@ echo >> "$HOME"/.bashrc
 echo "# The following lines add TreeTagger to the PATH variable" >> "$HOME"/.bashrc
 echo "export PATH=\$PATH:/home/ubuntu/treetagger/cmd" >> "$HOME"/.bashrc
 echo "export PATH=\$PATH:/home/ubuntu/treetagger/bin" >> "$HOME"/.bashrc
-source "$HOME"/.bashrc
+#source "$HOME"/.bashrc
 
 # Setting up Python virtual environment
 # Regarding Google Cloud Python APIs, please check https://github.com/googleapis/google-cloud-python
