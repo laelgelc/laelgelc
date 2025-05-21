@@ -11,8 +11,8 @@ clear
 brew update && brew upgrade || { echo "Failed to update and upgrade packages"; exit 1; }
 
 # Installing necessary packages
-brew install aws-cli
-brew install python3-pip python3-venv xsel ripgrep html2text zip unzip pipx ffmpeg
+brew install awscli
+brew install xsel ripgrep html2text zip unzip pipx ffmpeg
 
 # Creating directory for TreeTagger
 mkdir -p "$HOME"/treetagger/
@@ -38,20 +38,6 @@ echo "# The following lines add TreeTagger to the PATH variable" >> "$HOME"/.zsh
 echo "export PATH=\$PATH:/Users/eyamrog/treetagger/cmd" >> "$HOME"/.zshrc
 echo "export PATH=\$PATH:/Users/eyamrog/treetagger/bin" >> "$HOME"/.zshrc
 #source "$HOME"/.zshrc
-
-# Setting up Python virtual environment
-# Regarding Google Cloud Python APIs, please check https://github.com/googleapis/google-cloud-python
-cd "$HOME"
-#python3 -m pip install --upgrade pip
-python3 -m venv my_env
-source "$HOME"/my_env/bin/activate
-if [ -z "$VIRTUAL_ENV" ]; then
-    echo "Error: Virtual environment not activated!"
-    exit 1
-fi
-pip install -r "$HOME"/work/laelgelc/my_env.req
-#pip install --upgrade -r "$HOME"/work/laelgelc/my_env.req
-python -m ipykernel install --user --name=my_env
 
 # Setting up 'git' global parameters
 #git config --global --list
