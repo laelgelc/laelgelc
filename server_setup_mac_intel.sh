@@ -11,7 +11,7 @@ clear
 brew update && brew upgrade || { echo "Failed to update and upgrade packages"; exit 1; }
 
 # Installing necessary packages
-brew install awscli
+#brew install awscli
 brew install xsel ripgrep html2text zip unzip pipx ffmpeg
 
 # Creating directory for TreeTagger
