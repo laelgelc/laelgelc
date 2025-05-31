@@ -58,6 +58,10 @@ cat << EOF >> "$HOME"/.gitignore_global
 
 # Environment & secrets
 .env
+
+# JupyterLab
+.ipynb_checkpoints/
+
 EOF
 
 ## Set global excludesfile
