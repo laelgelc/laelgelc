@@ -1,3 +1,6 @@
+# General
+nohup.out
+
 # Windows system files
 Thumbs.db
  
@@ -6,3 +9,6 @@ Thumbs.db
 
 # JupyterLab
 .ipynb_checkpoints/
+
+# RStudio
+.Rhistory

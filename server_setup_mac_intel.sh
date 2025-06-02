@@ -53,6 +53,9 @@ git config --global user.email "eyamrog@gmail.com"
 ## Create or update global .gitignore
 touch "$HOME"/.gitignore_global
 cat << EOF >> "$HOME"/.gitignore_global
+# General
+nohup.out
+
 # macOS system files
 .DS_Store
 
@@ -61,6 +64,9 @@ cat << EOF >> "$HOME"/.gitignore_global
 
 # JupyterLab
 .ipynb_checkpoints/
+
+# RStudio
+.Rhistory
 
 EOF
 
