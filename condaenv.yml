@@ -46,6 +46,7 @@ dependencies:
   - scipy
   - seaborn
   - selenium
+  - spyder
   - tqdm
 #  - truthbrush
   - validators
