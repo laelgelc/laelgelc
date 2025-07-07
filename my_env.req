@@ -18,6 +18,7 @@ numpy
 openai
 openpyxl
 pandas
+pandoc
 plotly
 PyMuPDF
 pypdf

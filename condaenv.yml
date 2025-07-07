@@ -33,6 +33,7 @@ dependencies:
   - openai
   - openpyxl
   - pandas
+  - pandoc
   - plotly
 #  - pymupdf
   - pypdf
