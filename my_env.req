@@ -11,6 +11,7 @@ google-cloud-videointelligence
 google-cloud-vision
 ipython
 jupyterlab
+lckr-jupyterlab-variableinspector
 lxml
 matplotlib
 nltk
