@@ -1,10 +1,11 @@
 {
     "python.condaPath": "/opt/anaconda3/bin/conda",
-    "python.defaultInterpreterPath": "/opt/anaconda3/envs/my_env",
+    "python.defaultInterpreterPath": "/opt/anaconda3/envs/my_env/bin/python",
     "python.experiments.optInto": [
         "pythonTerminalEnvVarActivation"
     ],
     "python.pythonPath": "/opt/anaconda3/envs/my_env/bin/python",
     "python.terminal.activateEnvInCurrentTerminal": true,
-    "python.terminal.activateEnvironment": true
+    "python.terminal.activateEnvironment": true,
+    "terminal.integrated.copyOnSelection": true
 }
