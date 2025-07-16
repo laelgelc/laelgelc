@@ -27,6 +27,7 @@ dependencies:
   - ipython
   - jupyterlab
   - jupyterlab-variableinspector
+  - jupytext
   - lxml
   - matplotlib
   - nltk

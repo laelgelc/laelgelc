@@ -1,2 +1,3 @@
-# general
-General-purpose repository
+# Corpus Linguistics
+
+## General-purpose repository
