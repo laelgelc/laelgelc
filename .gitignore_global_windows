@@ -12,3 +12,20 @@ Thumbs.db
 
 # RStudio
 .Rhistory
+
+# LaTeX
+*.aux
+*.bbl
+*.blg
+*.log
+*.out
+*.toc
+*.fls
+*.fdb_latexmk
+*.synctex.gz
+*.nav
+*.snm
+*.vrb
+*.dvi
+*.ps
+*.synctex

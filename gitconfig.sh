@@ -26,6 +26,23 @@ nohup.out
 # RStudio
 .Rhistory
 
+# LaTeX
+*.aux
+*.bbl
+*.blg
+*.log
+*.out
+*.toc
+*.fls
+*.fdb_latexmk
+*.synctex.gz
+*.nav
+*.snm
+*.vrb
+*.dvi
+*.ps
+*.synctex
+
 EOF
 
 ## Set global excludesfile
