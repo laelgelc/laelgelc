@@ -20,6 +20,7 @@ numpy
 openai
 openpyxl
 pandas
+pandas-stubs
 pandoc
 plotly
 PyMuPDF
