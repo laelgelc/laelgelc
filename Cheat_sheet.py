@@ -24,6 +24,88 @@
 # # Cheat sheet
 
 # %% [markdown]
+# ## LaTeX compilation
+
+# %% [markdown]
+# ### `latexmk` - Automatic LaTeX document generation routine
+
+# %% [markdown]
+# ```
+# (my_env) eyamrog@Rog-iMac cl_st1_eyamrog_en % latexmk -pdf main.tex
+# ``
+
+# %% [markdown]
+# | Command                    | What It Does                                     |
+# |----------------------------|--------------------------------------------------|
+# | latexmk -pdf main.tex      | Compile to PDF using pdfLaTeX                    |
+# | latexmk -lualatex main.tex | Compile to PDF using LuaLaTeX                    |
+# | latexmk -xelatex main.tex  | Compile to PDF using XeLaTeX                     |
+# | latexmk -c                 | Clean up auxiliary files                         |
+# | latexmk -C                 | Clean everything, including the PDF              |
+# | latexmk -pdf -f main.tex   | Force compilation with pdfLaTeX even with errors |
+#
+
+# %% [markdown]
+# ### LaTeX mumbo jumbo
+
+# %% [markdown]
+# ```
+# (my_env) eyamrog@Rog-iMac cl_st1_eyamrog_en % pdflatex main.tex
+# (my_env) eyamrog@Rog-iMac cl_st1_eyamrog_en % bibtex main
+# (my_env) eyamrog@Rog-iMac cl_st1_eyamrog_en % pdflatex main.tex
+# (my_env) eyamrog@Rog-iMac cl_st1_eyamrog_en % pdflatex main.tex
+# ```
+
+# %% [markdown]
+# ## PyCharm shortcuts
+
+# %% [markdown]
+# ### Move the cursor:
+
+# %% [markdown]
+# - to the end of a line
+#     - `Cmd` + `Rigth Arrow key` (macOS)
+# - to the beginning of a line
+#     - `Cmd` + `Left Arrow key` (macOS)
+
+# %% [markdown]
+# ### Place cursors in specific points in the text
+
+# %% [markdown]
+# Hold the following key and click where you want each cursor
+# - `Option` (macOS)
+# - `Alt` (Windows/Linux)
+
+# %% [markdown]
+# ### Place cursors in multiple consecutive lines
+
+# %% [markdown]
+# #### Method 1
+
+# %% [markdown]
+# 1. Select the entire block of lines
+# 2. Press:
+# - `Option` + `Shift` + `G` (macOS)
+# - `Alt` + `Shift` + `G` (Windows/Linux)
+#
+# This places a cursor at the end of each selected line. You can also move the cursors to the beginning of the line with `Cmd` + `Left Arrow key`
+
+# %% [markdown]
+# #### Method 2
+
+# %% [markdown]
+# Toggle to `Column Selection Mode` with the following shortcuts then drag your mouse down the column to place cursors
+# - `Cmd` + `Shift` + `8` (macOS)
+# - `Alt` + `Shift` + `Insert` (Windows/Linux)
+
+# %% [markdown]
+# ### Change all occurrences of a word
+
+# %% [markdown]
+# - `Cmd` + `Ctrl` + `G` (macOS)
+# - `Ctrl` + `Alt` + `Shift` + `J` (Windows/Linux)
+
+# %% [markdown]
 # ## Pairing Jupyter Notebooks with `Jupytext`
 
 # %% [markdown]
