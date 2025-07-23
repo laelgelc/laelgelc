@@ -1163,7 +1163,7 @@ logging.basicConfig(
 
 # %% [markdown] vscode={"languageId": "plaintext"}
 # ```
-# #!/bin/bash
+# !/bin/bash
 #
 # # Set parameters
 # path="2019_03"
@@ -1184,7 +1184,7 @@ logging.basicConfig(
 # aws s3 cp "$HOME"/"$path"/"$filename" s3://"$destination_bucket"/
 #
 # # Remove the input directory
-# # rm -r "$HOME"/"$path"/
+# rm -r "$HOME"/"$path"/
 # ```
 
 # %% [markdown]
