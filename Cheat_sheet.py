@@ -32,7 +32,7 @@
 # %% [markdown]
 # ```
 # (my_env) eyamrog@Rog-iMac cl_st1_eyamrog_en % latexmk -pdf main.tex
-# ``
+# ```
 
 # %% [markdown]
 # | Command                    | What It Does                                     |
