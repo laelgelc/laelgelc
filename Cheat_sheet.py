@@ -57,6 +57,28 @@
 # ```
 
 # %% [markdown]
+# ## TeX Live
+#
+
+# %% [markdown]
+# ```
+# tlmgr --help
+# tlmgr update --self      # Updates tlmgr itself
+# tlmgr update --list
+# tlmgr update --all       # Updates all installed packages
+# tlmgr install <package>  # Installs a specific package
+# ```
+#
+
+# %% [markdown]
+# ## Pandoc
+
+# %% [markdown]
+# ```
+# pandoc -s <yourfile>.tex -o <cleaned_text>.txt
+# ```
+
+# %% [markdown]
 # ## PyCharm shortcuts
 
 # %% [markdown]
@@ -281,26 +303,6 @@ logging.basicConfig(
 # - `Win` + `Shift` + `M`: Restores all minimised windows after using `Win` + `M`
 
 # %% [markdown]
-# ## Pandoc
-
-# %% [markdown]
-# ```
-# pandoc -s <yourfile>.tex -o <cleaned_text>.txt
-# ```
-
-# %% [markdown]
-# ## TeX Live
-
-# %% [markdown]
-# ```
-# tlmgr --help
-# tlmgr update --self      # Updates tlmgr itself
-# tlmgr update --list
-# tlmgr update --all       # Updates all installed packages
-# tlmgr install <package>  # Installs a specific package
-# ```
-
-# %% [markdown]
 # ## Parallels Desktop
 
 # %% [markdown]
@@ -333,6 +335,39 @@ logging.basicConfig(
 # eyamrog@ubuntu:~$ ls /media/psf/Home
 # eyamrog@ubuntu:~$ ln -s /media/psf/Home /home/eyamrog/host_home
 # eyamrog@ubuntu:~$ ls host_home
+# ```
+
+# %% [markdown]
+# ## Configuring an Ubuntu host to acquire an IP address via DHCP based on MAC address
+
+# %% [markdown]
+# By default, Ubuntu hosts do not acquire an IP address via DHCP (in a Parallels Desktop environment, for example) based on MAC address. The default behaviour is to use a Client Identifier (Client-ID) that is not based on the MAC address. Therefore, a cloned Ubuntu instance would acquire the same IP address assigned to the parent host, which may lead to duplicated IP addresses. The following configuration modifies this behaviour by specifying the `dhcp-identifier` as the MAC address.
+
+# %% [markdown]
+# ```
+# Last login: Wed Jul 23 14:34:03 2025 from 10.211.55.2
+# eyamrog@ubuntu:~$ cd /etc/netplan
+# eyamrog@ubuntu:/etc/netplan$ ll
+# total 12
+# drwxr-xr-x   2 root root 4096 Jul 15 14:08 ./
+# drwxr-xr-x 117 root root 4096 Jul 23 14:14 ../
+# -rw-------   1 root root   92 Jul 15 14:08 50-cloud-init.yaml
+# eyamrog@ubuntu:/etc/netplan$ sudo more 50-cloud-init.yaml
+# [sudo] password for eyamrog:
+# network:
+#   version: 2
+#   ethernets:
+#     enp0s5:
+#       dhcp4: true
+# eyamrog@ubuntu:/etc/netplan$ sudo vim 50-cloud-init.yaml
+# eyamrog@ubuntu:/etc/netplan$ sudo more 50-cloud-init.yaml
+# network:
+#   version: 2
+#   ethernets:
+#     enp0s5:
+#       dhcp4: true
+#       dhcp-identifier: mac
+# eyamrog@ubuntu:/etc/netplan$ exit
 # ```
 
 # %% [markdown]
