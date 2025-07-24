@@ -86,6 +86,7 @@ nohup.out
 *.blg
 *.lof
 *.log
+*.lol
 *.lot
 *.out
 *.toc
