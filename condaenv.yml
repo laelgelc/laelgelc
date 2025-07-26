@@ -14,6 +14,7 @@
 name: my_env
 dependencies:
   - beautifulsoup4
+  - bibtexparser
   - boto3
   - dash
   - demoji
