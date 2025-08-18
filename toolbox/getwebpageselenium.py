@@ -22,7 +22,9 @@ def main(file_id, url):
     # Set up the WebDriver (make sure you have downloaded the Microsoft Edge WebDriver executable)
     # https://developer.microsoft.com/en-us/microsoft-edge/tools/webdriver/
 
-    service = Service(r'C:\Users\eyamr\OneDrive\00-Technology\laelgelc\edgedriver_win64\msedgedriver.exe')
+    #service = Service(r'C:\Users\eyamr\OneDrive\00-Technology\msedgedriver\edgedriver_win64\msedgedriver.exe')
+    service = Service('/Users/eyamrog/msedgedriver/edgedriver_mac64/msedgedriver')
+    #service = Service('/home/eyamrog/msedgedriver/edgedriver_linux64/msedgedriver')
     driver = webdriver.Edge(service=service)
 
     try:
