@@ -39,6 +39,7 @@ dependencies:
   - pandas-stubs
   - pandoc
   - plotly
+  - pyinstaller
 #  - pymupdf
   - pypdf
   - pySmartDL
