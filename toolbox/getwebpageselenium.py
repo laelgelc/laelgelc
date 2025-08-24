@@ -7,34 +7,39 @@ from bs4 import BeautifulSoup
 import time
 from selenium import webdriver
 from selenium.webdriver.edge.service import Service
-from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.edge.options import Options
 
 def main(file_id, url):
-    """Fetch a web page using Selenium, save it as an HTML file, and extract 'h' and 'p' tags' text."""
-    
+    """Fetch a web page using Selenium, save it as an HTML file, and extract 'h', 'p', 'ul' and 'ol' tags text."""
+
     # Validate URL
     if not validators.url(url):
         print("Invalid URL. Please provide a valid URL.")
         return
-    
+
     # Set up the WebDriver (make sure you have downloaded the Microsoft Edge WebDriver executable)
     # https://developer.microsoft.com/en-us/microsoft-edge/tools/webdriver/
 
     #service = Service(r'C:\Users\eyamr\OneDrive\00-Technology\msedgedriver\edgedriver_win64\msedgedriver.exe')
     service = Service('/Users/eyamrog/msedgedriver/edgedriver_mac64/msedgedriver')
     #service = Service('/home/eyamrog/msedgedriver/edgedriver_linux64/msedgedriver')
-    driver = webdriver.Edge(service=service)
+
+    # Configure Edge to run headless
+    options = Options()
+    # For modern Edge/Chromium; if incompatible with your version, try "--headless"
+    options.add_argument('--headless=new')
+    options.add_argument('--disable-gpu')
+    options.add_argument('--window-size=1920,1080')
+
+    driver = webdriver.Edge(service=service, options=options)
 
     try:
         # Navigate to the URL
         driver.get(url)
-        
-        # Wait for page to load (adjust as needed for better stability)
+
+        # Explicit wait for stable page load
         wait = WebDriverWait(driver, 10)
-        #time.sleep(15)  # Waits for 15 seconds
-        #wait.until(EC.presence_of_element_located((By.TAG_NAME, 'body')))
 
         # Extra reliability check: Wait until the page source stops changing
         max_wait_time = 30  # Max time in seconds
@@ -46,9 +51,9 @@ def main(file_id, url):
                 break  # Exit loop if page stops changing or max wait time is exceeded
             previous_html = current_html
             time.sleep(2)  # Short delay before checking again
-        
+
         # Now, the page is fully loaded - extract content!
-        
+
         # Get the full page source
         page_source = driver.page_source
 
@@ -60,7 +65,7 @@ def main(file_id, url):
 
         # Extract text from 'h' and 'p' tags
         soup = BeautifulSoup(page_source, 'lxml')
-        text_content = [tag.get_text(strip=True) for tag in soup.find_all(['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'p'])]
+        text_content = [tag.get_text(strip=True) for tag in soup.find_all(['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'p', 'ul', 'ol'])]
 
         # Save the extracted text to a file
         text_file_path = f"{file_id}.txt"
