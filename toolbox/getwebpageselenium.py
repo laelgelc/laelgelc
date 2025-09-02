@@ -8,6 +8,8 @@ import time
 from selenium import webdriver
 from selenium.webdriver.edge.service import Service
 from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.edge.options import Options
 
 def main(file_id, url):
@@ -40,11 +42,13 @@ def main(file_id, url):
 
         # Explicit wait for stable page load
         wait = WebDriverWait(driver, 10)
+        wait.until(EC.presence_of_element_located((By.TAG_NAME, 'body')))
 
         # Extra reliability check: Wait until the page source stops changing
         max_wait_time = 30  # Max time in seconds
         start_time = time.time()
         previous_html = ''
+
         while True:
             current_html = driver.page_source
             if current_html == previous_html or time.time() - start_time > max_wait_time:
