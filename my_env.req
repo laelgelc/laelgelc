@@ -27,6 +27,7 @@ plotly
 pyinstaller
 PyMuPDF
 pypdf
+pyside6
 pySmartDL
 pyspark
 python-docx

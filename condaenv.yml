@@ -42,6 +42,7 @@ dependencies:
   - pyinstaller
 #  - pymupdf
   - pypdf
+  - pyside6
   - pySmartDL
   - pyspark
   - python-docx
