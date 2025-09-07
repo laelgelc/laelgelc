@@ -706,12 +706,12 @@ logging.basicConfig(
 #
 # 02/08/2024  10:59    <DIR>          .
 # 19/07/2024  07:37    <DIR>          ..
-# 02/08/2024  11:08               412 condaenv.yml
+# 02/08/2024  11:08               412 condaenv.yaml
 # 02/08/2024  11:04               809 scratchpad.sh
 #                2 File(s)          1.221 bytes
 #                2 Dir(s)  898.125.189.120 bytes free
 #
-# (base) C:\Users\eyamr\Downloads>conda env create -f condaenv.yml
+# (base) C:\Users\eyamr\Downloads>conda env create -f condaenv.yaml
 # <omitted>
 #
 #
