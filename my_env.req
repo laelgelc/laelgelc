@@ -38,7 +38,7 @@ scipy
 seaborn
 selenium
 spacy
-spacy-model-en_core_web_sm
+#spacy-model-en_core_web_sm
 spyder
 tqdm
 truthbrush
