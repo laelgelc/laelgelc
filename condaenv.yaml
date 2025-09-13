@@ -6,6 +6,7 @@
 # conda remove --name my_env --all
 # conda env create --file=condaenv.yaml
 # conda activate my_env
+# python -m spacy download en_core_web_sm
 # conda list
 # conda deactivate
 # exit
@@ -50,13 +51,14 @@ dependencies:
   - seaborn
   - selenium
   - spacy
-  - spacy-model-en_core_web_sm
+#  - spacy-model-en_core_web_sm
   - spyder
   - tqdm
   - validators
   - wordcloud
   - yake
   - yt-dlp
+  - pip
   - pip:
       - gogettr
       - pymupdf
