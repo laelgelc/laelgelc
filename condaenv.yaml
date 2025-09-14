@@ -15,19 +15,19 @@ name: my_env
 dependencies:
   - beautifulsoup4
   - bibtexparser
-  - boto3
-  - dash
-  - demoji
-  - folium
-  - gensim
-  - google-cloud-storage
-  - google-cloud-translate
-  - google-cloud-videointelligence
-  - google-cloud-vision
+#  - boto3
+#  - dash
+#  - demoji
+#  - folium
+#  - gensim
+#  - google-cloud-storage
+#  - google-cloud-translate
+#  - google-cloud-videointelligence
+#  - google-cloud-vision
   - ipython
   - jupyterlab
-  - jupyterlab-variableinspector
-  - jupytext
+#  - jupyterlab-variableinspector
+#  - jupytext
   - lxml
   - matplotlib
   - nltk
@@ -36,13 +36,13 @@ dependencies:
   - openpyxl
   - pandas
   - pandas-stubs
-  - pandoc
+#  - pandoc
   - plotly
-  - pyinstaller
-  - pypdf
-  - pyside6
-  - pySmartDL
-  - pyspark
+#  - pyinstaller
+#  - pypdf
+#  - pyside6
+#  - pySmartDL
+#  - pyspark
   - python-docx
   - python-dotenv
   - requests
@@ -50,17 +50,17 @@ dependencies:
   - scipy
   - seaborn
   - selenium
-  - spacy
+#  - spacy
 #  - spacy-model-en_core_web_sm
-  - spyder
+#  - spyder
   - tqdm
   - validators
-  - wordcloud
-  - yake
+#  - wordcloud
+#  - yake
   - yt-dlp
-  - pip
+#  - pip
   - pip:
-      - gogettr
+#      - gogettr
       - pymupdf
-      - truthbrush
-      - webvtt-py
+#      - truthbrush
+#      - webvtt-py
