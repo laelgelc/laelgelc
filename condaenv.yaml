@@ -56,7 +56,7 @@ dependencies:
 #  - wordcloud
 #  - yake
   - yt-dlp
-#  - pip
+  - pip
   - pip:
 #      - gogettr
       - pymupdf
