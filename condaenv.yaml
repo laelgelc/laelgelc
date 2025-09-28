@@ -47,6 +47,7 @@ dependencies:
   - requests
   - scikit-learn
   - scipy
+  - scipy-stubs
   - seaborn
   - selenium
 #  - spacy

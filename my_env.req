@@ -35,6 +35,7 @@ python-dotenv
 requests
 scikit-learn
 scipy
+scipy-stubs
 seaborn
 selenium
 #spacy
