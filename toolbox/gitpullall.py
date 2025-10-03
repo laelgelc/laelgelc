@@ -32,15 +32,14 @@ def git_pull(path: Path, remote: str = None, branch: str = None) -> Tuple[bool, 
     except FileNotFoundError:
         return False, "git not found"
 
-def walk_dirs(root: Path, max_depth: int) -> Path:
-    # Yield root first if it's a repo; then walk subdirs with depth control
+def walk_dirs(root: Path, max_depth: int):
+    # Yield root first; then walk subdirs with depth control
     yield root
     if max_depth == 0:
         return
     for dirpath, dirnames, _ in os.walk(root):
         depth = Path(dirpath).relative_to(root).parts
         if len(depth) >= max_depth:
-            # Prevent descending further
             dirnames[:] = []
         yield Path(dirpath)
 
@@ -73,10 +72,18 @@ def main() -> None:
         action="store_true",
         help="Skip hidden directories (those starting with a dot)",
     )
+    # Default behavior: only act on directories that are git repos themselves
     parser.add_argument(
-        "--only-top",
+        "--no-only-top",
+        dest="only_top",
+        action="store_false",
+        help="Allow traversing into subdirectories inside repositories (disables default only-top behavior)",
+    )
+    parser.set_defaults(only_top=True)
+    parser.add_argument(
+        "-v", "--verbose",
         action="store_true",
-        help="Only run in directories that are git repos themselves; do not traverse into their children.",
+        help="Print non-repo directories as [SKIP]",
     )
     args = parser.parse_args()
 
@@ -88,37 +95,20 @@ def main() -> None:
         if args.skip_hidden and path != root and path.name.startswith("."):
             continue
 
-        # If we've already processed this repo (due to nested paths), skip
-        # Determine repo root by walking up until .git found or filesystem root
-        repo_root = None
-        current = path
-        while True:
-            if is_git_repo(current):
-                repo_root = current
-                break
-            if current.parent == current:
-                break
-            current = current.parent
-
-        if repo_root is None:
-            # Not a git repo
-            # Print only if the directory itself has a .git? The user wants brief status even for non-repos.
-            if path == root or (path / ".git").exists():
-                pass  # handled above
-            print(f"[SKIP] {path} - not a git repository")
+        # Consider only the directory itself as a repo (do not walk up)
+        if not is_git_repo(path):
+            if args.verbose:
+                print(f"[SKIP] {path} - not a git repository")
             continue
 
-        # If only-top is set, only act on the repo root directories encountered, not deeper paths within the same repo
-        if args.only_top and repo_root != path:
-            continue
-
-        if repo_root in seen_repos:
-            continue
-        seen_repos.add(repo_root)
+        repo_root = path
+        if args.only_top:
+            if repo_root in seen_repos:
+                continue
+            seen_repos.add(repo_root)
 
         ok, msg = git_pull(repo_root, args.remote, args.branch)
 
-        # Classify message
         brief = "OK"
         if not ok:
             brief = "ERROR"
@@ -130,16 +120,9 @@ def main() -> None:
                 brief = "UPDATED"
 
         print(f"[{brief}] {repo_root}")
-        # For quick context, show first line of git output
-        first_line = (msg.splitlines() or [""]).pop(0)
+        first_line = (msg.splitlines() or [""])[0]
         if first_line:
             print(f"  -> {first_line}")
-
-        # If only-top, avoid descending into this repo's subdirs
-        if args.only_top:
-            # Prevent walking into children of this repo by clearing subsequent yields for its subtree
-            # Not easily done with os.walk already in progress; rely on seen_repos to avoid repeats.
-            pass
 
 if __name__ == "__main__":
     main()
