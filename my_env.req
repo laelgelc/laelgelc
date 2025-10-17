@@ -44,6 +44,6 @@ tqdm
 #truthbrush
 validators
 #webvtt-py
-#wordcloud
+wordcloud
 #yake
 yt-dlp

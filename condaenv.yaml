@@ -54,7 +54,7 @@ dependencies:
 #  - spyder
   - tqdm
   - validators
-#  - wordcloud
+  - wordcloud
 #  - yake
   - yt-dlp
   - pip
