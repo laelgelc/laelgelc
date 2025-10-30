@@ -6,6 +6,7 @@ Thumbs.db
  
 # Environment & secrets
 .env
+*.env
 
 # JupyterLab
 .ipynb_checkpoints/

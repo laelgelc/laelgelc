@@ -73,6 +73,7 @@ nohup.out
 
 # Environment & secrets
 .env
+*.env
 
 # JupyterLab
 .ipynb_checkpoints/
