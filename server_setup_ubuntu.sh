@@ -83,6 +83,7 @@ nohup.out
 # LaTeX
 *.aux
 *.bbl
+*.bcf
 *.blg
 *.lof
 *.log
@@ -92,6 +93,7 @@ nohup.out
 *.toc
 *.fls
 *.fdb_latexmk
+*.run.xml
 *.synctex.gz
 *.nav
 *.snm
