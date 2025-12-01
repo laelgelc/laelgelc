@@ -11,7 +11,12 @@
 # exit
 # Regarding Google Cloud Python APIs, please check https://github.com/googleapis/google-cloud-python
 name: my_env
+channels:
+  - anaconda
+  - conda-forge
+  - defaults
 dependencies:
+#  - python=3.13.9
   - beautifulsoup4
   - bibtexparser
 #  - boto3
