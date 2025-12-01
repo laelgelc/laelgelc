@@ -23,6 +23,7 @@ dependencies:
 #  - google-cloud-translate
 #  - google-cloud-videointelligence
 #  - google-cloud-vision
+  - google-generativeai
   - ipython
   - jupyterlab
 #  - jupyterlab-variableinspector
