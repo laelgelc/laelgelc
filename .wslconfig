@@ -1,2 +1,18 @@
 [wsl2]
+# Limits memory usage to 8GB
 memory=8GB
+
+# Automatically shrinks the Windows VHDX (virtual disk) file when you delete files in Linux.
+# This is GREAT for keeping your Windows C: drive from filling up.
+sparseVhd=true
+
+[experimental]
+# Automatically gives memory back to Windows when Linux isn't using it anymore.
+# Without this, WSL tends to "squat" on that 8GB even if it's idle.
+autoMemoryReclaim=gradual
+
+# Optimizes network performance between Windows and WSL
+networkingMode=mirrored
+
+# Automatically clears out cached memory inside Linux to help with the memory reclamation
+autoProxy=true
