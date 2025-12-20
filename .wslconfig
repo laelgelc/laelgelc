@@ -2,11 +2,11 @@
 # Limits memory usage to 8GB
 memory=8GB
 
+[experimental]
 # Automatically shrinks the Windows VHDX (virtual disk) file when you delete files in Linux.
 # This is GREAT for keeping your Windows C: drive from filling up.
 sparseVhd=true
 
-[experimental]
 # Automatically gives memory back to Windows when Linux isn't using it anymore.
 # Without this, WSL tends to "squat" on that 8GB even if it's idle.
 autoMemoryReclaim=gradual
