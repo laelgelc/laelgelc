@@ -1,0 +1,6 @@
+[user]
+	name = Rogério Yamada
+	email = eyamrog@gmail.com
+[core]
+	autocrlf = input
+	excludesfile = /home/eyamrog/.gitignore_global
