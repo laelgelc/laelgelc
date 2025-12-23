@@ -116,32 +116,26 @@ if ! shopt -oq posix; then
   fi
 fi
 
-# The following lines enable the emulation of the macOS commands 'pbcopy' and 'pbpaste'
-alias pbcopy='xsel --clipboard --input'
-alias pbpaste='xsel --clipboard --output'
+# >>> conda initialize >>>
+# !! Contents within this block are managed by 'conda init' !!
+__conda_setup="$('/home/eyamrog/anaconda3/bin/conda' 'shell.bash' 'hook' 2> /dev/null)"
+if [ $? -eq 0 ]; then
+    eval "$__conda_setup"
+else
+    if [ -f "/home/eyamrog/anaconda3/etc/profile.d/conda.sh" ]; then
+        . "/home/eyamrog/anaconda3/etc/profile.d/conda.sh"
+    else
+        export PATH="/home/eyamrog/anaconda3/bin:$PATH"
+    fi
+fi
+unset __conda_setup
+# <<< conda initialize <<<
 
-# Created by `pipx` on 2024-06-09 14:13:05
-export PATH="$PATH:/home/eyamrog/.local/bin"
+# The following line adds TeX Live to the PATH variable
+export PATH=/usr/local/texlive/2025/bin/x86_64-linux:$PATH
+export MANPATH=/usr/local/texlive/2025/texmf-dist/doc/man:$MANPATH
+export INFOPATH=/usr/local/texlive/2025/texmf-dist/doc/info:$INFOPATH
 
-# Workaround to allow deactivation of 'my_env' on VS Code's terminal
-#if [ -f ~/my_env/bin/activate ]; then
-#    source ~/my_env/bin/activate
-#fi
-
-## >>> conda initialize >>>
-## !! Contents within this block are managed by 'conda init' !!
-#__conda_setup="$('/home/eyamrog/anaconda3/bin/conda' 'shell.bash' 'hook' 2> /dev/null)"
-#if [ $? -eq 0 ]; then
-#    eval "$__conda_setup"
-#else
-#    if [ -f "/home/eyamrog/anaconda3/etc/profile.d/conda.sh" ]; then
-#        . "/home/eyamrog/anaconda3/etc/profile.d/conda.sh"
-#    else
-#        export PATH="/home/eyamrog/anaconda3/bin:$PATH"
-#    fi
-#fi
-#unset __conda_setup
-## <<< conda initialize <<<
 
 # The following lines add TreeTagger to the PATH variable
 export PATH=$PATH:/home/eyamrog/treetagger/cmd
