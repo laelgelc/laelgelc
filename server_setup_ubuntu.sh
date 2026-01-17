@@ -12,22 +12,22 @@ set -e
 
 echo "--- Starting System Update and Basic Packages Installation ---"
 
-# Updating and upgrading the system
+# Update and upgrade the system
 sudo apt update && sudo apt upgrade -y || { echo "Failed to update and upgrade packages"; exit 1; }
 
-# Installing necessary packages
+# Install necessary packages
 sudo snap install aws-cli --classic
 sudo apt install -y python3-pip python3-venv git curl xsel ripgrep html2text zip unzip bzip2 pipx ffmpeg tesseract-ocr tesseract-ocr-por tesseract-ocr-spa ocrmypdf
 
 echo "--- Starting TreeTagger Setup ---"
 
-# Creating directory for TreeTagger
+# Create directory for TreeTagger
 mkdir -p "$HOME"/treetagger/
 
-# Defining base URL for TreeTagger files
+# Define base URL for TreeTagger files
 BASE_URL="https://cis.uni-muenchen.de/~schmid/tools/TreeTagger/data"
 
-# Downloading TreeTagger - uncomment the version of programme that matches the type of system
+# Download TreeTagger - uncomment the version of programme that matches the type of system
 cd "$HOME"/treetagger/
 #curl -O "${BASE_URL}/tree-tagger-linux-3.2.5.tar.gz"
 curl -O "${BASE_URL}/tree-tagger-ARM64-3.2.tar.gz"
@@ -36,11 +36,11 @@ curl -O "${BASE_URL}/install-tagger.sh"
 curl -O "${BASE_URL}/english.par.gz"
 curl -O "${BASE_URL}/portuguese2.par.gz"
 
-# Installing TreeTagger
+# Install TreeTagger
 chmod +x "$HOME"/treetagger/install-tagger.sh
 "$HOME"/treetagger/install-tagger.sh
 
-# Appending TreeTagger paths to .bashrc
+# Append TreeTagger paths to .bashrc
 echo >> "$HOME"/.bashrc
 echo "# The following lines add TreeTagger to the PATH variable" >> "$HOME"/.bashrc
 echo "export PATH=\$PATH:/home/ubuntu/treetagger/cmd" >> "$HOME"/.bashrc
@@ -49,7 +49,7 @@ echo "export PATH=\$PATH:/home/ubuntu/treetagger/bin" >> "$HOME"/.bashrc
 
 echo "--- Starting Python Virtual Environment Setup ---"
 
-# Setting up Python virtual environment
+# Set up Python virtual environment
 # Regarding Google Cloud Python APIs, please check https://github.com/googleapis/google-cloud-python
 cd "$HOME"
 #python3 -m pip install --upgrade pip
@@ -153,6 +153,22 @@ sudo apt install -y firefox libasound2t64 libdbus-glib-1-2 libgtk-3-0t64 libx11-
 echo "--- Firefox Setup Complete! ---"
 #firefox --version
 apt policy firefox
+
+echo "--- Starting geckodriver Setup ---"
+
+# Create directory for geckodriver
+mkdir -p "$HOME"/geckodriver/
+
+# Download geckodriver for Linux 64 (linux64) or Linux ARM64 (aarch64) - uncomment the version of programme that matches the type of system
+# Note: Check for the latest version at https://github.com/mozilla/geckodriver/releases
+cd "$HOME"/geckodriver/
+#wget https://github.com/mozilla/geckodriver/releases/download/v0.36.0/geckodriver-v0.36.0-linux64.tar.gz
+wget https://github.com/mozilla/geckodriver/releases/download/v0.36.0/geckodriver-v0.36.0-linux-aarch64.tar.gz
+
+# Extract
+#tar -xzf geckodriver-v0.36.0-linux64.tar.gz
+tar -xzf geckodriver-v0.36.0-linux-aarch64.tar.gz
+sudo chmod +x geckodriver
 
 echo "--- Starting GitHub SSH Setup ---"
 
