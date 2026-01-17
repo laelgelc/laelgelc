@@ -162,5 +162,8 @@ ssh-keygen -t ed25519 -C "eyamrog@gmail.com" -f "$HOME/.ssh/id_ed25519" -N ""
 echo "SSH key generated. Here is your public key to add to GitHub:"
 cat "$HOME/.ssh/id_ed25519.pub"
 
+echo "--- Setup Finished ---"
+read -p "Press [Enter] to reboot the system..."
+
 # Rebooting the system for kernel's update
-#sudo reboot
+sudo reboot
