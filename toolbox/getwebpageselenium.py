@@ -6,11 +6,13 @@ import validators
 from bs4 import BeautifulSoup
 import time
 from selenium import webdriver
-from selenium.webdriver.edge.service import Service
+#from selenium.webdriver.edge.service import Service
+from selenium.webdriver.firefox.service import Service
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.edge.options import Options
+#from selenium.webdriver.edge.options import Options
+from selenium.webdriver.firefox.options import Options
 
 def main(file_id, url):
     """Fetch a web page using Selenium, save it as an HTML file, and extract 'h', 'p', 'ul' and 'ol' tags text."""
@@ -22,19 +24,29 @@ def main(file_id, url):
 
     # Set up the WebDriver (make sure you have downloaded the Microsoft Edge WebDriver executable)
     # https://developer.microsoft.com/en-us/microsoft-edge/tools/webdriver/
+    # Set up the WebDriver (make sure you have downloaded the latest 'geckodrive' executable)
+    # Ensure 'geckodriver' is executable: chmod + x /path/to/geckodriver
+    # https://github.com/mozilla/geckodriver/releases
 
     #service = Service(r'C:\Users\eyamr\OneDrive\00-Technology\msedgedriver\edgedriver_win64\msedgedriver.exe')
-    service = Service('/Users/eyamrog/msedgedriver/edgedriver_mac64/msedgedriver')
+    #service = Service('/Users/eyamrog/msedgedriver/edgedriver_mac64/msedgedriver')
     #service = Service('/home/eyamrog/msedgedriver/edgedriver_linux64/msedgedriver')
+    #service = Service('/home/eyamrog/geckodriver/geckodriver')
+    service = Service()  # Selenium will automatically detect the correct driver executable and cache it in '~/.cache/selenium'
 
-    # Configure Edge to run headless
+    ## Configure Edge to run headless
+    #options = Options()
+    ## For modern Edge/Chromium; if incompatible with your version, try "--headless"
+    #options.add_argument('--headless=new')
+    #options.add_argument('--disable-gpu')
+    #options.add_argument('--window-size=1920,1080')
+
+    # Configure Firefox to run headless
     options = Options()
-    # For modern Edge/Chromium; if incompatible with your version, try "--headless"
-    options.add_argument('--headless=new')
-    options.add_argument('--disable-gpu')
-    options.add_argument('--window-size=1920,1080')
+    options.add_argument('--headless')
 
-    driver = webdriver.Edge(service=service, options=options)
+    #driver = webdriver.Edge(service=service, options=options)
+    driver = webdriver.Firefox(service=service, options=options)
 
     try:
         # Navigate to the URL
