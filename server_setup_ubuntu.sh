@@ -148,11 +148,10 @@ echo 'Unattended-Upgrade::Allowed-Origins:: "LP-PPA-mozillateam:${distro_codenam
 
 # Install Firefox and dependencies
 echo "Installing Firefox and headless dependencies..."
-sudo apt update
-sudo apt install -y firefox libasound2 libdbus-glib-1-2 libgtk-3-0 libx11-xcb1 xvfb
+sudo apt install -y firefox libasound2t64 libdbus-glib-1-2 libgtk-3-0t64 libx11-xcb1 xvfb
 
 echo "--- Firefox Setup Complete! ---"
-firefox --version
+#firefox --version
 apt policy firefox
 
 echo "--- Starting GitHub SSH Setup ---"
