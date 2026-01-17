@@ -7,12 +7,19 @@
 
 clear
 
+# Exit immediately if a command exits with a non-zero status
+set -e
+
+echo "--- Starting System Update and Basic Packages Installation ---"
+
 # Updating and upgrading the system
 sudo apt update && sudo apt upgrade -y || { echo "Failed to update and upgrade packages"; exit 1; }
 
 # Installing necessary packages
 sudo snap install aws-cli --classic
 sudo apt install -y python3-pip python3-venv git curl xsel ripgrep html2text zip unzip bzip2 pipx ffmpeg tesseract-ocr tesseract-ocr-por tesseract-ocr-spa ocrmypdf
+
+echo "--- Starting TreeTagger Setup ---"
 
 # Creating directory for TreeTagger
 mkdir -p "$HOME"/treetagger/
@@ -40,6 +47,8 @@ echo "export PATH=\$PATH:/home/ubuntu/treetagger/cmd" >> "$HOME"/.bashrc
 echo "export PATH=\$PATH:/home/ubuntu/treetagger/bin" >> "$HOME"/.bashrc
 #source "$HOME"/.bashrc
 
+echo "--- Starting Python Virtual Environment Setup ---"
+
 # Setting up Python virtual environment
 # Regarding Google Cloud Python APIs, please check https://github.com/googleapis/google-cloud-python
 cd "$HOME"
@@ -54,18 +63,19 @@ pip install -r "$HOME"/work/laelgelc/my_env.req
 #pip install --upgrade -r "$HOME"/work/laelgelc/my_env.req
 python -m ipykernel install --user --name=my_env
 
-# Setting up 'git' global parameters
-## Ensure Git is installed
+echo "--- Starting Git Global Parameters Setup ---"
+
+# Ensure Git is installed
 if ! command -v git &> /dev/null; then
     echo "Error: Git is not installed!"
     exit 1
 fi
 
-## Set Git global parameters
+# Set Git global parameters
 git config --global user.name "Rogério Yamada"
 git config --global user.email "eyamrog@gmail.com"
 
-## Create or update global .gitignore
+# Create or update global .gitignore
 touch "$HOME"/.gitignore_global
 cat << EOF >> "$HOME"/.gitignore_global
 # General
@@ -104,11 +114,54 @@ nohup.out
 
 EOF
 
-## Set global excludesfile
+# Set global excludesfile
 git config --global core.excludesfile "$HOME"/.gitignore_global
 
-## Confirm configuration
+# Confirm configuration
 #git config --global --list
+
+echo "--- Starting Firefox Non-Snap Setup ---"
+
+# Remove Firefox Snap if needed
+echo "Removing Firefox Snap..."
+sudo snap remove firefox || true
+
+# Add Mozilla Team PPA
+echo "Adding Mozilla Team PPA..."
+sudo add-apt-repository -y ppa:mozillateam/ppa
+
+# Configure APT Priority for PPA
+# This prevents Ubuntu from trying to reinstall the snap version
+echo "Configuring PPA priorities..."
+sudo tee /etc/apt/preferences.d/mozilla-firefox <<EOF
+Package: *
+Pin: release o=LP-PPA-mozillateam
+Pin-Priority: 1001
+
+Package: firefox*
+Pin: release o=Ubuntu*
+Pin-Priority: -1
+EOF
+
+# Enable automatic updates for the PPA version
+echo 'Unattended-Upgrade::Allowed-Origins:: "LP-PPA-mozillateam:${distro_codename}";' | sudo tee /etc/apt/apt.conf.d/51unattended-upgrades-firefox
+
+# Install Firefox and dependencies
+echo "Installing Firefox and headless dependencies..."
+sudo apt update
+sudo apt install -y firefox libasound2 libdbus-glib-1-2 libgtk-3-0 libx11-xcb1 xvfb
+
+echo "--- Firefox Setup Complete! ---"
+firefox --version
+apt policy firefox
+
+echo "--- Starting GitHub SSH Setup ---"
+
+# Generate SSH key pair
+ssh-keygen -t ed25519 -C "eyamrog@gmail.com" -f "$HOME/.ssh/id_ed25519" -N ""
+
+echo "SSH key generated. Here is your public key to add to GitHub:"
+cat "$HOME/.ssh/id_ed25519.pub"
 
 # Rebooting the system for kernel's update
 #sudo reboot
