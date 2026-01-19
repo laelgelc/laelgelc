@@ -133,8 +133,8 @@ sudo add-apt-repository -y ppa:mozillateam/ppa
 # Configure APT Priority for PPA
 # This prevents Ubuntu from trying to reinstall the snap version
 echo "Configuring PPA priorities..."
-sudo tee /etc/apt/preferences.d/mozilla-firefox <<EOF
-Package: *
+sudo tee /etc/apt/preferences.d/mozilla-firefox << 'EOF'
+Package: firefox
 Pin: release o=LP-PPA-mozillateam
 Pin-Priority: 1001
 
@@ -144,7 +144,12 @@ Pin-Priority: -1
 EOF
 
 # Enable automatic updates for the PPA version
-echo 'Unattended-Upgrade::Allowed-Origins:: "LP-PPA-mozillateam:${distro_codename}";' | sudo tee /etc/apt/apt.conf.d/51unattended-upgrades-firefox
+distro_codename=$(lsb_release -sc)
+echo "Unattended-Upgrade::Allowed-Origins:: \"LP-PPA-mozillateam:${distro_codename}\";" \
+  | sudo tee /etc/apt/apt.conf.d/51unattended-upgrades-firefox
+
+echo "Updating package lists..."
+sudo apt update
 
 # Install Firefox and dependencies
 echo "Installing Firefox and headless dependencies..."
