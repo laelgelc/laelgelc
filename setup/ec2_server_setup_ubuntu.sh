@@ -10,6 +10,7 @@
 # - Optional: --ssh-key (generate per-instance SSH key for git pushes)
 # - If python version is specified in the env YAML (e.g., - python=3.13.9), it takes priority
 # - No pip requirements file support
+# - Accepts Anaconda channel Terms of Service (ToS) non-interactively if needed
 #
 # Usage examples:
 #   bash setup/ec2_server_setup_ubuntu.sh
@@ -133,12 +134,10 @@ ARCH="$(uname -m)"
 case "$ARCH" in
   x86_64)
     TT_TARBALL="tree-tagger-linux-3.2.5.tar.gz"
-    GD_ASSET_SUFFIX="linux64"
     MINICONDA_SUFFIX="Linux-x86_64"
     ;;
   aarch64|arm64)
     TT_TARBALL="tree-tagger-ARM64-3.2.tar.gz"
-    GD_ASSET_SUFFIX="linux-aarch64"
     MINICONDA_SUFFIX="Linux-aarch64"
     ;;
   *)
@@ -171,6 +170,17 @@ if ! grep -q "### conda initialize" "$HOME/.bashrc" 2>/dev/null; then
 fi
 
 conda config --set always_yes yes --set changeps1 no
+
+echo "--- Accepting Conda Terms of Service if required ---"
+# Newer conda versions require ToS acceptance for Anaconda-provided channels in non-interactive use.
+# This makes the script fully unattended. If ToS is already accepted, these are no-ops.
+# We deliberately keep failures non-fatal here to avoid breaking setups that don't have 'conda tos'.
+if conda tos --help >/dev/null 2>&1; then
+  yes | conda tos accept --override-channels --channel https://repo.anaconda.com/pkgs/main >/dev/null 2>&1 || true
+  yes | conda tos accept --override-channels --channel https://repo.anaconda.com/pkgs/r >/dev/null 2>&1 || true
+fi
+
+echo "--- Updating base conda ---"
 conda update -n base -c defaults conda
 
 echo "--- Creating/Updating Conda Environment: ${ENV_NAME} ---"
@@ -298,28 +308,6 @@ sudo apt install -y firefox libasound2t64 libdbus-glib-1-2 libgtk-3-0t64 libx11-
 
 echo "--- Firefox Setup Complete ---"
 apt policy firefox || true
-
-echo "--- Starting geckodriver Setup ---"
-
-mkdir -p "$HOME/geckodriver/"
-cd "$HOME/geckodriver/"
-
-GECKO_VER="0.36.0"
-GECKO_TGZ="geckodriver-v${GECKO_VER}-${GD_ASSET_SUFFIX}.tar.gz"
-GECKO_URL="https://github.com/mozilla/geckodriver/releases/download/v${GECKO_VER}/${GECKO_TGZ}"
-
-curl -fL "$GECKO_URL" -o "$GECKO_TGZ"
-tar -xzf "$GECKO_TGZ"
-rm -f "$GECKO_TGZ"
-chmod +x "$HOME/geckodriver/geckodriver"
-
-if ! grep -q "$HOME/geckodriver" "$HOME/.bashrc" 2>/dev/null; then
-  {
-    echo ""
-    echo "# Add geckodriver to PATH"
-    echo "export PATH=\$PATH:$HOME/geckodriver"
-  } >> "$HOME/.bashrc"
-fi
 
 echo "--- GitHub SSH Setup (Optional) ---"
 
