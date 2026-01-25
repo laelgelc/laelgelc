@@ -72,8 +72,8 @@ if ! command -v git &> /dev/null; then
 fi
 
 # Set Git global parameters
-git config --global user.name "Rogério Yamada"
-git config --global user.email "eyamrog@gmail.com"
+git config --global user.name "${USER}@$(hostname -s)"
+git config --global user.email "${USER}@$(hostname -s).local"
 
 # Create or update global .gitignore
 touch "$HOME"/.gitignore_global

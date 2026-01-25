@@ -7,13 +7,11 @@
 # - Looks for environment YAMLs ONLY inside: ./env (relative to this script)
 # - Default env file: condaenv.yaml
 # - Optional: --env <FILENAME> (filename only; no paths)
+# - Optional: --ssh-key (generate per-instance SSH key for git pushes)
 # - If python version is specified in the env YAML (e.g., - python=3.13.9), it takes priority
 # - No pip requirements file support
 
 set -euo pipefail
-
-YOUR_NAME="Rogério Yamada"
-YOUR_EMAIL="eyamrog@gmail.com"
 
 SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
 ENV_DIR="${SCRIPT_DIR}/env"
@@ -21,17 +19,20 @@ ENV_DIR="${SCRIPT_DIR}/env"
 usage() {
   cat << 'EOF'
 Usage:
-  ./ec2_server_setup_ubuntu.sh [--env NAME]
+  ./ec2_server_setup_ubuntu.sh [--env NAME] [--ssh-key]
 
 Options:
   --env NAME    Environment YAML filename located in ./env (relative to this script).
                Examples: condaenv.yaml, my_other_env.yaml
                Default: condaenv.yaml
+  --ssh-key     Generate an ephemeral per-instance SSH keypair at ~/.ssh/id_ed25519 (only if missing)
+               and print the public key for registering as a GitHub deploy key (write access).
   -h, --help    Show this help message.
 EOF
 }
 
 ENV_BASENAME="condaenv.yaml"
+GENERATE_SSH_KEY=0
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
@@ -42,6 +43,10 @@ while [[ $# -gt 0 ]]; do
       fi
       ENV_BASENAME="$2"
       shift 2
+      ;;
+    --ssh-key)
+      GENERATE_SSH_KEY=1
+      shift 1
       ;;
     -h|--help)
       usage
@@ -108,7 +113,8 @@ sudo apt install -y \
   pipx build-essential \
   ffmpeg \
   tesseract-ocr tesseract-ocr-por tesseract-ocr-spa ocrmypdf \
-  software-properties-common
+  software-properties-common \
+  xvfb
 
 # Optional: AWS CLI via snap
 if ! command -v aws >/dev/null 2>&1; then
@@ -216,8 +222,8 @@ if ! command -v git >/dev/null 2>&1; then
   exit 1
 fi
 
-git config --global user.name "$YOUR_NAME"
-git config --global user.email "$YOUR_EMAIL"
+git config --global user.name "${USER}@$(hostname -s)"
+git config --global user.email "${USER}@$(hostname -s).local"
 
 touch "$HOME/.gitignore_global"
 cat << 'EOF' >> "$HOME/.gitignore_global"
@@ -278,7 +284,7 @@ echo "Unattended-Upgrade::Allowed-Origins:: \"LP-PPA-mozillateam:${distro_codena
   | sudo tee /etc/apt/apt.conf.d/51unattended-upgrades-firefox
 
 sudo apt update
-sudo apt install -y firefox libasound2t64 libdbus-glib-1-2 libgtk-3-0t64 libx11-xcb1 xvfb
+sudo apt install -y firefox libasound2t64 libdbus-glib-1-2 libgtk-3-0t64 libx11-xcb1
 
 echo "--- Firefox Setup Complete ---"
 apt policy firefox || true
@@ -306,10 +312,35 @@ if ! grep -q "$HOME/geckodriver" "$HOME/.bashrc" 2>/dev/null; then
 fi
 
 echo "--- GitHub SSH Setup (Optional) ---"
-echo "Skipped automatic SSH key generation."
-echo "Run manually if needed:"
-echo "  ssh-keygen -t ed25519 -C \"<YOUR_EMAIL>\" -f \"\$HOME/.ssh/id_ed25519\" -N \"\""
-echo "  cat \$HOME/.ssh/id_ed25519.pub"
+
+if [[ "$GENERATE_SSH_KEY" = "1" ]]; then
+  SSH_DIR="$HOME/.ssh"
+  KEY_PATH="$SSH_DIR/id_ed25519"
+  PUB_PATH="${KEY_PATH}.pub"
+
+  mkdir -p "$SSH_DIR"
+  chmod 700 "$SSH_DIR"
+
+  if [[ ! -f "$KEY_PATH" ]]; then
+    SSH_KEY_COMMENT="${USER}@$(hostname -s)"
+    ssh-keygen -t ed25519 -C "$SSH_KEY_COMMENT" -f "$KEY_PATH" -N ""
+    chmod 600 "$KEY_PATH"
+    chmod 644 "$PUB_PATH"
+  else
+    echo "SSH key already exists at $KEY_PATH; not generating a new one."
+  fi
+
+  # Avoid interactive host authenticity prompts for GitHub on first SSH use
+  touch "$SSH_DIR/known_hosts"
+  chmod 600 "$SSH_DIR/known_hosts"
+  ssh-keyscan -H github.com 2>/dev/null >> "$SSH_DIR/known_hosts" || true
+
+  echo ""
+  echo "SSH public key (add as a GitHub Deploy Key with write access):"
+  cat "$PUB_PATH"
+else
+  echo "Skipped SSH key generation. Re-run with: --ssh-key"
+fi
 
 echo "--- Setup Finished ---"
 echo "Next steps:"
