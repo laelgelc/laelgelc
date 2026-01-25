@@ -1,0 +1,320 @@
+#!/bin/bash
+
+# EC2 Ubuntu 24.04 setup script with Miniconda/conda environment recreation.
+#
+# Features:
+# - Runs from any directory (uses script location for relative paths)
+# - Looks for environment YAMLs ONLY inside: ./env (relative to this script)
+# - Default env file: condaenv.yaml
+# - Optional: --env <FILENAME> (filename only; no paths)
+# - If python version is specified in the env YAML (e.g., - python=3.13.9), it takes priority
+# - No pip requirements file support
+
+set -euo pipefail
+
+YOUR_NAME="Rogério Yamada"
+YOUR_EMAIL="eyamrog@gmail.com"
+
+SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
+ENV_DIR="${SCRIPT_DIR}/env"
+
+usage() {
+  cat << 'EOF'
+Usage:
+  ./ec2_server_setup_ubuntu.sh [--env NAME]
+
+Options:
+  --env NAME    Environment YAML filename located in ./env (relative to this script).
+               Examples: condaenv.yaml, my_other_env.yaml
+               Default: condaenv.yaml
+  -h, --help    Show this help message.
+EOF
+}
+
+ENV_BASENAME="condaenv.yaml"
+
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    --env)
+      if [[ $# -lt 2 ]]; then
+        echo "ERROR: --env requires a filename argument (must exist in env/)"
+        exit 1
+      fi
+      ENV_BASENAME="$2"
+      shift 2
+      ;;
+    -h|--help)
+      usage
+      exit 0
+      ;;
+    *)
+      echo "ERROR: Unknown argument: $1"
+      usage
+      exit 1
+      ;;
+  esac
+done
+
+# Enforce: only files inside env/ are allowed (no absolute paths, no ../, no subdirs)
+if [[ "$ENV_BASENAME" = /* ]] || [[ "$ENV_BASENAME" == *".."* ]] || [[ "$ENV_BASENAME" == */* ]]; then
+  echo "ERROR: --env must be a filename only (no paths)."
+  echo "It must refer to a file inside: ${ENV_DIR}"
+  exit 1
+fi
+
+ENV_FILE="${ENV_DIR}/${ENV_BASENAME}"
+
+if [[ ! -f "$ENV_FILE" ]]; then
+  echo "ERROR: Conda environment file not found in env/: ${ENV_FILE}"
+  echo "Available files in ${ENV_DIR}:"
+  ls -1 "${ENV_DIR}" 2>/dev/null || true
+  exit 1
+fi
+
+echo "--- Using conda environment file: $ENV_FILE ---"
+
+# Parse env name from YAML (fallback to my_env if missing)
+ENV_NAME="$(awk -F': *' '/^name:[[:space:]]*/ {print $2; exit}' "$ENV_FILE" | tr -d '\r')"
+ENV_NAME="${ENV_NAME:-my_env}"
+
+# Prefer python version specified in YAML as: - python=3.13.9 (any indentation)
+PY_VER_DEFAULT="3.13.9"
+PY_VER_FROM_FILE="$(awk '
+  /^[[:space:]]*dependencies:[[:space:]]*$/ {in_deps=1; next}
+  in_deps && /^[[:space:]]*-[[:space:]]*python[[:space:]]*=/ {
+    gsub(/^[[:space:]]*-[[:space:]]*python[[:space:]]*=/, "", $0)
+    gsub(/[[:space:]]+$/, "", $0)
+    print $0
+    exit
+  }
+' "$ENV_FILE" | tr -d '\r')"
+
+if [[ -n "$PY_VER_FROM_FILE" ]]; then
+  PY_SPEC="python=${PY_VER_FROM_FILE}"
+  echo "--- Python pinned in env file: ${PY_SPEC} (takes priority) ---"
+else
+  PY_SPEC="python=${PY_VER_DEFAULT}"
+  echo "--- No Python pin found in env file; using default: ${PY_SPEC} ---"
+fi
+
+echo "--- Starting System Update and Basic Packages Installation ---"
+
+sudo apt update
+sudo apt upgrade -y
+
+sudo apt install -y \
+  git curl wget ca-certificates \
+  xsel ripgrep html2text zip unzip bzip2 \
+  pipx build-essential \
+  ffmpeg \
+  tesseract-ocr tesseract-ocr-por tesseract-ocr-spa ocrmypdf \
+  software-properties-common
+
+# Optional: AWS CLI via snap
+if ! command -v aws >/dev/null 2>&1; then
+  sudo snap install aws-cli --classic
+fi
+
+echo "--- Detecting Architecture ---"
+ARCH="$(uname -m)"
+case "$ARCH" in
+  x86_64)
+    TT_TARBALL="tree-tagger-linux-3.2.5.tar.gz"
+    GD_ASSET_SUFFIX="linux64"
+    MINICONDA_SUFFIX="Linux-x86_64"
+    ;;
+  aarch64|arm64)
+    TT_TARBALL="tree-tagger-ARM64-3.2.tar.gz"
+    GD_ASSET_SUFFIX="linux-aarch64"
+    MINICONDA_SUFFIX="Linux-aarch64"
+    ;;
+  *)
+    echo "Unsupported architecture: $ARCH"
+    exit 1
+    ;;
+esac
+echo "ARCH=$ARCH"
+
+echo "--- Starting Conda (Miniconda) Setup ---"
+
+CONDA_DIR="$HOME/miniconda3"
+MINICONDA_INSTALLER="/tmp/miniconda.sh"
+MINICONDA_URL="https://repo.anaconda.com/miniconda/Miniconda3-latest-${MINICONDA_SUFFIX}.sh"
+
+if [[ ! -d "$CONDA_DIR" ]]; then
+  echo "Downloading Miniconda from: $MINICONDA_URL"
+  curl -fsSL "$MINICONDA_URL" -o "$MINICONDA_INSTALLER"
+  bash "$MINICONDA_INSTALLER" -b -p "$CONDA_DIR"
+else
+  echo "Miniconda already installed at $CONDA_DIR"
+fi
+
+# Load conda for this script (non-interactive)
+source "$CONDA_DIR/etc/profile.d/conda.sh"
+
+# Initialize conda for future interactive shells (safe to re-run)
+if ! grep -q "### conda initialize" "$HOME/.bashrc" 2>/dev/null; then
+  "$CONDA_DIR/bin/conda" init bash
+fi
+
+conda config --set always_yes yes --set changeps1 no
+conda update -n base -c defaults conda
+
+echo "--- Creating/Updating Conda Environment: ${ENV_NAME} ---"
+
+# If env exists: update it. If Python isn't pinned in YAML, enforce script default.
+if conda env list | awk '{print $1}' | grep -qx "$ENV_NAME"; then
+  echo "Environment '${ENV_NAME}' exists; updating from YAML..."
+  conda env update -n "$ENV_NAME" -f "$ENV_FILE" --prune
+
+  if [[ -z "$PY_VER_FROM_FILE" ]]; then
+    echo "Ensuring default Python version in existing env: ${PY_SPEC}"
+    conda install -n "$ENV_NAME" "$PY_SPEC"
+  fi
+else
+  echo "Environment '${ENV_NAME}' does not exist; creating..."
+  if [[ -n "$PY_VER_FROM_FILE" ]]; then
+    # YAML already pins Python; create directly from YAML
+    conda env create -f "$ENV_FILE"
+  else
+    # YAML doesn't pin Python; create env with desired Python first, then apply YAML
+    conda create -n "$ENV_NAME" "$PY_SPEC"
+    conda env update -n "$ENV_NAME" -f "$ENV_FILE" --prune
+  fi
+fi
+
+# Register Jupyter kernel (so JupyterLab sees the conda env)
+conda run -n "$ENV_NAME" python -m pip install --upgrade ipykernel
+conda run -n "$ENV_NAME" python -m ipykernel install --user --name="$ENV_NAME" --display-name="$ENV_NAME"
+
+echo "--- Starting TreeTagger Setup ---"
+
+mkdir -p "$HOME/treetagger/"
+BASE_URL="https://cis.uni-muenchen.de/~schmid/tools/TreeTagger/data"
+
+cd "$HOME/treetagger/"
+curl -fO "${BASE_URL}/${TT_TARBALL}"
+curl -fO "${BASE_URL}/tagger-scripts.tar.gz"
+curl -fO "${BASE_URL}/install-tagger.sh"
+curl -fO "${BASE_URL}/english.par.gz"
+curl -fO "${BASE_URL}/portuguese2.par.gz"
+
+chmod +x "$HOME/treetagger/install-tagger.sh"
+"$HOME/treetagger/install-tagger.sh"
+
+{
+  echo ""
+  echo "# The following lines add TreeTagger to the PATH variable"
+  echo "export PATH=\$PATH:$HOME/treetagger/cmd"
+  echo "export PATH=\$PATH:$HOME/treetagger/bin"
+} >> "$HOME/.bashrc"
+
+echo "--- Starting Git Global Parameters Setup ---"
+
+if ! command -v git >/dev/null 2>&1; then
+  echo "Error: Git is not installed!"
+  exit 1
+fi
+
+git config --global user.name "$YOUR_NAME"
+git config --global user.email "$YOUR_EMAIL"
+
+touch "$HOME/.gitignore_global"
+cat << 'EOF' >> "$HOME/.gitignore_global"
+# General
+nohup.out
+
+# Environment & secrets
+.env
+
+# JupyterLab
+.ipynb_checkpoints/
+
+# RStudio
+.Rhistory
+
+# LaTeX
+*.aux
+*.bbl
+*.bcf
+*.blg
+*.lof
+*.log
+*.lol
+*.lot
+*.out
+*.toc
+*.fls
+*.fdb_latexmk
+*.run.xml
+*.synctex.gz
+*.nav
+*.snm
+*.vrb
+*.dvi
+*.ps
+*.synctex
+EOF
+
+git config --global core.excludesfile "$HOME/.gitignore_global"
+
+echo "--- Starting Firefox Non-Snap Setup ---"
+
+sudo snap remove firefox || true
+sudo add-apt-repository -y ppa:mozillateam/ppa
+
+sudo tee /etc/apt/preferences.d/mozilla-firefox << 'EOF'
+Package: firefox
+Pin: release o=LP-PPA-mozillateam
+Pin-Priority: 1001
+
+Package: firefox*
+Pin: release o=Ubuntu*
+Pin-Priority: -1
+EOF
+
+distro_codename="$(lsb_release -sc)"
+echo "Unattended-Upgrade::Allowed-Origins:: \"LP-PPA-mozillateam:${distro_codename}\";" \
+  | sudo tee /etc/apt/apt.conf.d/51unattended-upgrades-firefox
+
+sudo apt update
+sudo apt install -y firefox libasound2t64 libdbus-glib-1-2 libgtk-3-0t64 libx11-xcb1 xvfb
+
+echo "--- Firefox Setup Complete ---"
+apt policy firefox || true
+
+echo "--- Starting geckodriver Setup ---"
+
+mkdir -p "$HOME/geckodriver/"
+cd "$HOME/geckodriver/"
+
+GECKO_VER="0.36.0"
+GECKO_TGZ="geckodriver-v${GECKO_VER}-${GD_ASSET_SUFFIX}.tar.gz"
+GECKO_URL="https://github.com/mozilla/geckodriver/releases/download/v${GECKO_VER}/${GECKO_TGZ}"
+
+curl -fL "$GECKO_URL" -o "$GECKO_TGZ"
+tar -xzf "$GECKO_TGZ"
+rm -f "$GECKO_TGZ"
+chmod +x "$HOME/geckodriver/geckodriver"
+
+if ! grep -q "$HOME/geckodriver" "$HOME/.bashrc" 2>/dev/null; then
+  {
+    echo ""
+    echo "# Add geckodriver to PATH"
+    echo "export PATH=\$PATH:$HOME/geckodriver"
+  } >> "$HOME/.bashrc"
+fi
+
+echo "--- GitHub SSH Setup (Optional) ---"
+echo "Skipped automatic SSH key generation."
+echo "Run manually if needed:"
+echo "  ssh-keygen -t ed25519 -C \"<YOUR_EMAIL>\" -f \"\$HOME/.ssh/id_ed25519\" -N \"\""
+echo "  cat \$HOME/.ssh/id_ed25519.pub"
+
+echo "--- Setup Finished ---"
+echo "Next steps:"
+echo "  source ~/.bashrc"
+echo "  conda activate ${ENV_NAME}"
+echo ""
+echo "Optional (recommended after large upgrades):"
+echo "  sudo reboot"
