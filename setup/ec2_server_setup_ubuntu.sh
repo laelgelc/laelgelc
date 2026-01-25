@@ -10,6 +10,12 @@
 # - Optional: --ssh-key (generate per-instance SSH key for git pushes)
 # - If python version is specified in the env YAML (e.g., - python=3.13.9), it takes priority
 # - No pip requirements file support
+#
+# Usage examples:
+#   bash setup/ec2_server_setup_ubuntu.sh
+#   bash setup/ec2_server_setup_ubuntu.sh --env condaenv.yaml
+#   bash setup/ec2_server_setup_ubuntu.sh --ssh-key
+#   bash setup/ec2_server_setup_ubuntu.sh --env my_other_env.yaml --ssh-key
 
 set -euo pipefail
 
@@ -109,6 +115,7 @@ sudo apt upgrade -y
 
 sudo apt install -y \
   git curl wget ca-certificates \
+  openssh-client \
   xsel ripgrep html2text zip unzip bzip2 \
   pipx build-essential \
   ffmpeg \
@@ -208,12 +215,15 @@ curl -fO "${BASE_URL}/portuguese2.par.gz"
 chmod +x "$HOME/treetagger/install-tagger.sh"
 "$HOME/treetagger/install-tagger.sh"
 
-{
-  echo ""
-  echo "# The following lines add TreeTagger to the PATH variable"
-  echo "export PATH=\$PATH:$HOME/treetagger/cmd"
-  echo "export PATH=\$PATH:$HOME/treetagger/bin"
-} >> "$HOME/.bashrc"
+# Add TreeTagger PATH entries only once (idempotent)
+if ! grep -q "$HOME/treetagger/cmd" "$HOME/.bashrc" 2>/dev/null; then
+  {
+    echo ""
+    echo "# The following lines add TreeTagger to the PATH variable"
+    echo "export PATH=\$PATH:$HOME/treetagger/cmd"
+    echo "export PATH=\$PATH:$HOME/treetagger/bin"
+  } >> "$HOME/.bashrc"
+fi
 
 echo "--- Starting Git Global Parameters Setup ---"
 
@@ -225,8 +235,8 @@ fi
 git config --global user.name "${USER}@$(hostname -s)"
 git config --global user.email "${USER}@$(hostname -s).local"
 
-touch "$HOME/.gitignore_global"
-cat << 'EOF' >> "$HOME/.gitignore_global"
+# Write (don’t append) to keep this idempotent
+cat << 'EOF' > "$HOME/.gitignore_global"
 # General
 nohup.out
 
@@ -269,7 +279,7 @@ echo "--- Starting Firefox Non-Snap Setup ---"
 sudo snap remove firefox || true
 sudo add-apt-repository -y ppa:mozillateam/ppa
 
-sudo tee /etc/apt/preferences.d/mozilla-firefox << 'EOF'
+sudo tee /etc/apt/preferences.d/mozilla-firefox > /dev/null << 'EOF'
 Package: firefox
 Pin: release o=LP-PPA-mozillateam
 Pin-Priority: 1001
@@ -281,7 +291,7 @@ EOF
 
 distro_codename="$(lsb_release -sc)"
 echo "Unattended-Upgrade::Allowed-Origins:: \"LP-PPA-mozillateam:${distro_codename}\";" \
-  | sudo tee /etc/apt/apt.conf.d/51unattended-upgrades-firefox
+  | sudo tee /etc/apt/apt.conf.d/51unattended-upgrades-firefox > /dev/null
 
 sudo apt update
 sudo apt install -y firefox libasound2t64 libdbus-glib-1-2 libgtk-3-0t64 libx11-xcb1
@@ -349,3 +359,7 @@ echo "  conda activate ${ENV_NAME}"
 echo ""
 echo "Optional (recommended after large upgrades):"
 echo "  sudo reboot"
+read -p "Press [Enter] to reboot the system..."
+
+# Rebooting the system for kernel's update
+sudo reboot
