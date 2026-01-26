@@ -48,6 +48,7 @@ dependencies:
 #  - pyside6
 #  - pySmartDL
 #  - pyspark
+#  - pytest
   - python-docx
   - python-dotenv
   - requests
