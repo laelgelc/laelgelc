@@ -1,0 +1,105 @@
+BIBER 1998 Corpus Linguistics - Investigating Language Structure and Use
+
+BIBER and REPPEN 2015 The Cambridge Handbook of English Corpus Linguistics
+
+CHAPELLE 2013 The encyclopedia of Applied Linguistics
+
+LUZ DE ARAUJO and ROTH 2025 Helpful assistant or fruitful facilitator?
+
+Projeto de pesquisa de doutorado
+
+Este projeto investiga o problema de déficit de registro em textos produzidos por Inteligência Artificial (IA), entendido como a limitação dos Grandes Modelos de Linguagem (Large Language Models – LLMs, em inglês) em adequar sua produção às convenções sociocomunicativas próprias dos registros humanos. Registros são variedades textuais definidas pelo contexto situacional (Biber, 2012). A IA gerativa atual carece de sensibilidade à variação de registro, produzindo textos formalmente corretos, mas comunicativamente artificiais. O objetivo é verificar se o ajuste fino (fine-tuning) de um modelo da família GPT, com base em corpora representativos do registro resumo de congresso acadêmico, é capaz de reduzir esse déficit. A fundamentação teórica ancora-se na Linguística de Corpus (Berber Sardinha, 2004) e na Análise Multidimensional (Biber, 1988), que permitem descrever empiricamente a variação linguística a partir da coocorrência de traços lexicogramaticais. A metodologia envolve a criação de três corpora comparáveis: H-ConfAbs (resumos humanos autênticos), AI-ConfAbs (resumos gerados por IA sem fine-tuning) e FT-ConfAbs (resumos produzidos após o fine-tuning). Cada corpus conterá 500 textos, distribuídos entre seis áreas e três abordagens teórica, qualitativa e quantitativa, totalizando 4500 textos. A análise multidimensional comparará as dimensões extraídas dos corpora para determinar se o fine-tuning aproxima a linguagem da IA das convenções do registro acadêmico humano.
+
+
+Grandes Modelos de Linguagem; registro resumo de congresso acadêmico; ajuste fino (fine-tuning); Análise Multidimensional; Linguística de Corpus
+
+Déficit de registro em Inteligência Artificial: Uma proposta de ajuste fino baseada em Linguística de Corpus
+
+
+Align
+Anchor
+Broad
+Challenge
+Challenging
+Core
+Critique
+Crucial
+Draw
+Echo
+Embrace
+Examine
+Flatten
+Frame
+Further
+Grounded
+Highlight
+Integrate
+Integrated
+Juxtapose
+Leverage
+Multifaceted
+Navigate
+Nuance
+Outputs
+Primarily
+Robust
+Significant
+Structural
+Structure
+Structured
+Support
+Systematic
+Systematically
+Tendencies
+Variations
+While
+
+
+
+This study looks at to which degree GPT can help authors align their academic English with scientific publication standards. Authors often relied on either specialised translators or reviewers in publication vehicles, to help them meet the specific language patterns (Biber and Barbieri) reinforced by the Anglo-Saxon standard of English academic writing (Belcher). Artifical intelligence (AI)’s “clear” prowess in producing academic-grade text made it a viable alternative for editing their work for publication. However, although Large Language Models, such as GPT, have been extensively trained on academic English, prior research suggests that AI may not replicate human academic writing lexicogrammar (Berber Sardinha). Through additive Multi-Dimensional Analysis (Berber Sardinha et al.) on the dimensions of variation by Biber coupled with Analysis of Variance (ANOVA) to assess statistical significance, the study explored the extent to which GPT can reproduce the academic register across different disciplines. In the experimental design, we compiled a corpus of pre-publication articles (sourced from an archive containing early drafts) submitted before ChatGPT’s general availability on the 30th November 2022. We prompted GPT to edit the writing for publication, considering the generally accepted standards of English for Academic Purposes. Then we compared this pre-publication corpus (the original human-authored version and its AI-edited counterpart) with a reference corpus (published articles from quality journals) spanning the same time period and disciplines. The results indicated that AI-edited academic writing diverged from human standards of academic English, amplifying informational production characteristics (Dimension 1), explicit references (Dimension 3), and abstraction (Dimension 5), while adjusting narrativity (Dimension 2). The effect of AI interventions varied across disciplines. Excessive informational production characteristics appeared less critical for the Health and Biological Sciences, whereas excessive abstraction was a concern for all disciplines except Applied Social Sciences. In general, AI tended to model all disciplines after the Health and Biological Sciences (i.e., “hard” sciences) in terms of informational production, and upon the Applied Social Sciences in terms of abstract style. The effect on narrativity (Dimension 2) and argumentation (Dimension 4) varied according to discipline. In conclusion, this study outlines GPT’s limitations in faithfully reproducing human-authored academic English.
+
+
+
+This study looks at to which degree GPT can help authors align their academic English with scientific publication standards. Authors often relied on either specialised translators or reviewers in publication vehicles, to help them meet the specific language patterns (Biber & Barbieri, 2007) reinforced by the Anglo-Saxon standard of English academic writing (Belcher, 2007). Artifical intelligence’s “clear” prowess in producing academic-grade text made it a viable alternative for editing their work for publication. However, although Large Language Models, such as GPT, have been extensively trained on academic English, prior research suggests that it may not replicate human academic writing lexicogrammar (Berber Sardinha, 2024). Through additive Multi-Dimensional Analysis (Berber Sardinha et al., 2019) on the dimensions of variation by Biber (1988) coupled with Analysis of Variance (ANOVA) to assess statistical significance, the study explored the extent to which GPT can reproduce the academic register across different disciplines. In the experimental design, we compiled a corpus of pre-publication articles (sourced from an archive containing early drafts) submitted before ChatGPT’s general availability on the 30th November 2022. We prompted GPT to edit the writing for publication, considering the generally accepted standards of English for Academic Purposes. Then we compared this pre-publication corpus (the original human-authored version and its GPT-edited counterpart) with a reference corpus (published articles from quality journals) spanning the same time period and disciplines. The results indicated that GPT-edited academic writing diverged from human standards of academic English, amplifying informational production characteristics (Dimension 1), explicit references (Dimension 3), and abstraction (Dimension 5), while adjusting narrativity (Dimension 2). The effect of GPT interventions varied across disciplines. Excessive informational production characteristics appeared less critical for the Health and Biological Sciences, whereas excessive abstraction was a concern for all disciplines except Applied Social Sciences. In general, GPT tended to model all disciplines after the Health and Biological Sciences (i.e., “hard” sciences) in terms of informational production, and upon the Applied Social Sciences in terms of abstract style. The effect on narrativity (Dimension 2) and argumentation (Dimension 4) varied according to discipline. In conclusion, this study outlines GPT’s limitations in faithfully reproducing human-authored academic English.
+
+Belcher, D. D. (2007). Seeking acceptance in an English-only research world. Journal of Second Language Writing, 16 (1), 1–22. https://doi.org/10.1016/j.jslw.2006.12.001
+Berber Sardinha, T. (2024). AI-generated versus human-authored texts: A multidimensional comparison. Applied Corpus Linguistics, 4 (1), 100083. https://doi.org/10.1016/j.acorp.2023.100083
+Berber Sardinha, T., Veirano Pinto, M., Mayer, C., Zuppardi, M. C., & Kauffmann, C. H. (2019). Adding Registers to a Previous Multi-Dimensional Analysis. In T. Berber Sardinha & M. Veirano Pinto (Eds.), Multi-dimensional analysis: Research methods and current issues (1st ed., pp. 165–186). Bloomsbury Academic. OCLC: 1230234974.
+Biber, D. (1988). Variation across speech and writing (1st ed.). Cambridge University Press. https://doi.org/10.1017/CBO9780511621024
+Biber, D., & Barbieri, F. (2007). Lexical bundles in university spoken and written registers. English for Specific Purposes, 26 (3), 263–286. https://doi.org/10.1016/j.esp.2006.08.003
+
+Bom dia, Professor Tony! Muito obrigado pela nossa conversa na quarta-feira. Após refletir bastante, gostaria de fazer uma sugestão. Para mim, é uma honra e um privilégio fazer parte do GELC. Assim, proponho que este trabalho que tenho realizado seja minha oportunidade para contribuir com o GELC sem necessidade de acerto de honorários para os projetos sob sua gestão. Trabalharei com prazer com os membros que você me encaminhar, para que haja bom planejamento e uso de recursos.
+
+Com relação a serviços de computação na nuvem (LLMs, por exemplo), os pesquisadores que dispõe de verba poderiam me prover API keys de suas contas. Os casos em que, mediante seu julgamento, terão custos absorvidos pelo projeto temático, poderiam ter API keys providas por contas vinculadas a este projeto (embora não tenha certeza de que isso seja possível administrativamente). A decisão seria sua em conjunto com o pesquisador, caso por caso.
+
+Um caso particular seria os serviços de processamento de dados na nuvem da AWS. Tenho usado máquinas virtuais (VMs) da AWS para processamentos de longa duração porque elas são imunes à falta de energia e de acesso à Internet. Uso uma conta dedicada ao GELC vinculada ao meu cartão de crédito pessoal. Geralmente, o custo não é muito alto, pois procuro usar VMs de menor custo por hora, baseadas em processadores Graviton, da própria AWS. Posso prover uma estimativa baseada no uso até o começo do semestre letivo. Seria possível vincular esta conta ao projeto temático? Podemos conversar sobre isso mais tarde.
+
+Muito obrigado, Professor Tony! Que tenha um bom dia e fim de semana!
+
+
+SERRAS 2025 Análise e Classificação Automática de Domínios Discursivos no Português do Brasil
+EGBERT 2024 Register and the dual nature of functional correspondence
+VIANA 2021 Corpus Linguistics for English for Academic Purposes
+XIAO and MCENERY 2025 Two Approaches to Genre Analysis
+
+Lexical Multidimensional Analysis (LMDA; Berber Sardinha & Fitzsimmons-Doolan, 2025) is an extension of Multidimensional Analysis (MDA; Biber, 1988, 1995) that was developed to detect lexical co-occurrence patterns that point to underlying discourses. As a development of the so-called Flagstaff School of Corpus Linguistics (cf. Cortes & Csomay, 2015), LMDA shares principles with MDA, such as linguistic co-occurrence signalling a common underlying trait, multidimensionality, and a text-linguistic focus (Veirano Pinto et al., 2025). MDA has been criticised for being unnecessarily complicated (Egbert et al., 2020; Xiao & McEnery, 2005), and so LMDA inherits these criticisms by extension. We recognize the complexity of LMDA. The method relies on multivariate statistics and involves several processing steps, including part-of-speech tagging, lemmatisation, feature selection, and feature counting on a text-by-text basis. It may also require converting continuous frequency measures to nominal values or applying frequency normalisation. At the analytical stage, correlations are computed, and factor analysis is applied to identify latent sets of co-occurring features, followed by analysis of variation across texts or groups. Consequently, a successful implementation of LMDA presupposes familiarity with statistical reasoning and with statistical software such as SPSS, SAS, or R; although programming is not required, writing one’s own scripts for automating parts of the workflow is an advantage. In this paper, we introduce a new application that simplifies running an LMDA by offloading the burden of corpus processing and statistical analysis, requiring only that the user provide a corpus and adjust a few settings. The app is free to use and runs on different operating systems. To conduct an analysis, the user uploads a corpus, specifies the language, sets the minimum factor loading, and defines whether POS categories should be filtered out and if keywords need to be computed. The user also toggles the data type as categorical, ordinal, or interval. The app then tags the texts, performs POS filtering if needed, applies the appropriate correlation method based on the data type, performs an initial factor analysis, and presents an eigenvalue list to help the user determine the number of factors. Once the user sets this number, the app completes the factor extraction, removes low communality features and scores each text on each factor. The app output includes, among other elements, the factorial pattern, a spreadsheet containing feature counts and factor scores, and a sample of high-scoring texts from each pole of each dimension to help users interpret the factors as dimensions. It is hoped that this tool will help make LMDA more widely adopted by researchers interested in describing discourse patterns.
+
+
+
+Lexical Multidimensional Analysis (LMDA; Berber Sardinha & Fitzsimmons-Doolan, 2025), an extension of Multidimensional Analysis (MDA; Biber, 1988, 1995), reveals underlying discourses by identifying lexical co-occurrence patterns. LMDA shares principles with MDA, such as linguistic co-occurrence signalling a common underlying trait, multidimensionality, and a text-linguistic focus (Veirano Pinto et al., 2025). As MDA faces criticism for being needlessly complicated (Egbert et al., 2020; Xiao & McEnery, 2005), so does LMDA. Working on LMDA can be rather complex. The method relies on multivariate statistics and involves several processing steps, including part-of-speech tagging, lemmatisation, feature selection, and text-by-text feature counting. Converting continuous frequency measures to nominal values or applying frequency normalisation might be required. During the analysis, correlations computation is followed by factor analysis to identify latent sets of co-occurring features, and then by analysis of variation across texts or groups. A successful LMDA implementation requires familiarity with statistical reasoning and software such as SPSS, SAS, or R. Programming is not mandatory, but customising scripts to automate parts of the workflow may be useful. In this paper, we introduce a new application that simplifies an LMDA by offloading the burden of corpus processing and statistical analysis, requiring only a corpus and a few user settings. It is free and available for different operating systems. To conduct an analysis, the user uploads a corpus, specifies the language, sets the minimum factor loading, and defines whether to filter out POS categories and whether to compute keywords. Data type should be set to categorical, ordinal, or interval. The app then tags the texts, filters POS if needed, applies the appropriate correlation method based on the data type, performs an initial factor analysis, and presents an eigenvalue list to help determine the number of factors. Then, the app completes factor extraction, removes low-communality features, and scores each text on each factor. The output includes the factorial pattern, a spreadsheet containing feature counts and factor scores, and a sample of high-scoring texts from each dimension pole to aid interpretation of the factors as dimensions. It is expected to widen LMDA adoption among researchers interested in describing discourse patterns.
+
+
+Berber Sardinha, T., & Fitzsimmons-Doolan, S. (2025, July 2). Lexical Multi-Dimensional Analysis: Identifying Discourses and Ideologies. Cambridge University Press. https://www.cambridge.org/core/elements/lexical-multidimensional-analysis/B2321B62435360F4F7C4AF3F1CCF4E59
+Biber, D. (1988). Variation across speech and writing (1st ed.). Cambridge University Press. https://doi.org/10.1017/CBO9780511621024
+Biber, D. (1995). Dimensions of register variation: A cross-linguistic comparison. Cambridge University Press.
+Egbert, J., Larsson, T., & Biber, D. (2020). Doing Linguistics with a Corpus: Methodological Considerations for the Everyday User. Cambridge University Press. https://doi.org/10.1017/9781108888790
+Veirano Pinto, M., Berber Sardinha, T., & Delfino, M. C. N. (2025). Multi-Dimensional Analysis of Corpora. In C. A. Chapelle (Ed.), The Encyclopedia of Applied Linguistics (1st ed., pp. 1–9). Wiley. https://doi.org/10.1002/9781405198431.wbeal20496
+Xiao, Z., & McEnery, A. (2005). Two Approaches to Genre Analysis: Three Genres in Modern American English. Journal of English Linguistics, 33 (1), 62–82. https://doi.org/10.1177/0075424204273957
+
+
+https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
+
+https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-aarch64.sh
+
+YOUR_NAME="Rogério Yamada"
+YOUR_EMAIL="eyamrog@gmail.com"

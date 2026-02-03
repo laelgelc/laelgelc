@@ -1,0 +1,36 @@
+Prezados Cláudia e Joe,
+
+Bom dia! Feliz 2026! Espero que estejam muito bem!
+
+Nesta semana consegui retomar o trabalho neste projeto e soube que você havia se juntado a nós, Professor Joe! É uma grande honra!
+
+A Cláudia comentou sobre uma forma de nos organizarmos. Eu sugiro que comecemos compartilhando métodos para compilação de corpus a partir de fontes em PDF.
+
+Na próxima mensagem desta trilha, está a orientação do Professor Tony, que transcrevo a seguir:
+
+Orientação com o Professor Tony:
+
+Forma de divisão dos textos em grupos para extração de keywords por log-likelihood (Scott, 1997): Por edição
+
+Definição de texto operacional deste estudo:
+
+Parágrafos, para textos que não sejam entrevista
+
+Turnos de resposta, para entrevistas. Descartar as perguntas (por, normalmente serem curtas demais)
+
+Descartar textos (parágrafos ou turnos de resposta) que sejam curtos demais, como de praxe
+
+Contagem de lemmas: presente/ausente
+
+Estamos usando o seguinte repositório neste projeto: https://github.com/laelgelc/cl_st1_claudia.git
+
+Ontem reorganizei os arquivos PDF originais. Uniformizei os nomes dos arquivos (por exemplo: VEm_01_1.pdf), extraí, por OCR, o texto dos arquivos das edições 16 e 17 que estavam sem camada de texto e adicionei a edição mais recente, a 32. Resultaram 165 arquivos PDF:
+
+3Corpus_VEm_dividido
+
+Extraí o texto dos arquivos PDF conforme está no link a seguir. Penso em restabelecer os nomes dos arquivos à nomenclatura anterior (por exemplo: VEm_01_1.txt).
+
+dataset
+
+Na próxima semana, a partir do dia 03/02/2026, farei a limpeza e 'denoising' dos textos usando GPT-5.1
+
