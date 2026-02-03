@@ -103,3 +103,57 @@ https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-aarch64.sh
 
 YOUR_NAME="Rogério Yamada"
 YOUR_EMAIL="eyamrog@gmail.com"
+
+Teoria Linguística II:
+2026_1H_Características_Linguísticas_da_IA_Gerativa
+
+PUTLAND 2025 Artificial intelligence and visual discourse
+REINHART 2025 Do LLMs write like humans - Variation in grammatical and rhetorical styles
+BAO 2025 Examining linguistic shifts in academic writing before and after the launch of ChatGPT
+
+
+CURSO TONY 1/2026
+
+-Tarefas para as primeiras aulas (começamos 2 da tarde, sala ainda não marcada):
+-Cada um faz uma apresentação sobre Ling. de Corpus de 10 minutos.
+-Pode escolher o(s) tema(s) de acordo com a literatura.
+-Sem slides (powerpoint, etc).
+-Pode usar lousa e voz apenas.
+-Haverá sorteio na aula de quem vai apresentar, portanto todo mundo deve vir preparado para apresentar.
+-Se o tópico da apresentação já tiver sido apresentado, é preciso fazer relação com a apresentação já ocorrida (concordando, discordando, aprofundando, ilustrando, etc.)
+-não fazer resenha de livro ou capítulo (não: ‘vou falar de x segundo fulano’; enfocar temas.
+
+Literatura (não exaustiva)
+
+Berber Sardinha, T. (2004). Linguística de Corpus. São Paulo: Manole.
+
+O'Keeffe, A., & McCarthy, M. (2022). The Routledge Handbook of Corpus Linguistics (2nd ed.). New York, NY: Routledge.
+
+Biber, D., Conrad, S., & Reppen, R. (1998). Corpus Linguistics - Investigating Language Structure and Use. Cambridge: Cambridge University Press.
+
+Biber, D., & Reppen, R. (Eds.). (2015). The Cambridge handbook of English corpus linguistics  [text]. Cambridge: Cambridge University Press. Cover image http://assets.cambridge.org/97811070/37380/cover/9781107037380.jpg.
+
+Chapelle, C. (2013). The Encyclopedia of Applied Linguistics. Malden, MA: Wiley-Blackwell.
+
+Biber, D. (1988). Variation Across Speech and Writing. Cambridge: Cambridge University Press.
+
+Pessoal , esclarecimento sobre a apresentação:
+
+- o objetivo é explicar um tema/problema/ etc.
+- não é o objetivo apresentar um texto : segundo fulano , ….
+- por isso , vcs devem ler vários textos sobre o tema que escolherem. Para não ficar falando de um texto específico.
+- a apresentação não é resenha.
+- segue uma estrutura possível da fala :
+- definição  do tema
+- conceituação / teoria
+- relevância
+- problema / desafio de pesquisa
+- histórico
+- análise
+
+Temas a serem evitados
+- tamanho de corpus
+- tipologia de corpus
+
+Não é para falar de NLP
+
