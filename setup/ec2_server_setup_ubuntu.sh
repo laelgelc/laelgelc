@@ -118,6 +118,7 @@ sudo apt install -y \
   git curl wget ca-certificates \
   openssh-client \
   xsel ripgrep html2text zip unzip bzip2 \
+  pandoc \
   pipx build-essential \
   ffmpeg \
   tesseract-ocr tesseract-ocr-por tesseract-ocr-spa ocrmypdf \
