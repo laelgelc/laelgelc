@@ -250,37 +250,6 @@ git config --global user.email "${USER}@$(hostname -s).local"
 cat << 'EOF' > "$HOME/.gitignore_global"
 # General
 nohup.out
-
-# Environment & secrets
-.env
-
-# JupyterLab
-.ipynb_checkpoints/
-
-# RStudio
-.Rhistory
-
-# LaTeX
-*.aux
-*.bbl
-*.bcf
-*.blg
-*.lof
-*.log
-*.lol
-*.lot
-*.out
-*.toc
-*.fls
-*.fdb_latexmk
-*.run.xml
-*.synctex.gz
-*.nav
-*.snm
-*.vrb
-*.dvi
-*.ps
-*.synctex
 EOF
 
 git config --global core.excludesfile "$HOME/.gitignore_global"
