@@ -250,6 +250,50 @@ git config --global user.email "${USER}@$(hostname -s).local"
 cat << 'EOF' > "$HOME/.gitignore_global"
 # General
 nohup.out
+
+# macOS system files
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Icon files
+Icon?
+
+# Thumbnails
+._*
+
+# macOS folder attributes
+.Spotlight-V100
+.Trashes
+
+# AFP share metadata
+.AppleDB
+.AppleDesktop
+Network Trash Folder
+Temporary Items
+.apdisk
+
+# RStudio project files
+.Rproj.user/
+*.Rproj
+
+# R session data
+.Rhistory
+.RData
+.Ruserdata
+
+# R package build artifacts
+.Rbuildignore
+.Rcheck/
+
+# R Markdown caches
+*_cache/
+cache/
+
+# renv
+renv/library/
+renv/staging/
+
 EOF
 
 git config --global core.excludesfile "$HOME/.gitignore_global"
