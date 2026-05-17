@@ -10,6 +10,16 @@ set -euo pipefail
 #   nohup bash run_python_ec2.sh capture_ao3_lists.py --test > process_output.log 2>&1 &
 #   nohup bash run_python_ec2.sh dummy.py --test > process_output.log 2>&1 &
 #
+#   # With script arguments and suitable for long commands
+#   nohup bash run_python_ec2.sh \
+#       python transcribe_image_handwriting.py \
+#           --model gpt-5.5 \
+#           --input-dir corpus/01_poc_dataset \
+#           --output-dir corpus/02_extracted \
+#           --no-test-mode \
+#           --workers 4 \
+#   > process_output.log 2>&1 &
+#
 #   # Tail logs in another shell
 #   tail -f process_output.log
 #   tail -f dummy.log
