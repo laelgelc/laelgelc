@@ -1,6 +1,9 @@
 [wsl2]
 # Limits memory usage to 8GB
 memory=8GB
+processors=4
+swap=8GB
+swapFile=C:\\Users\\eyamr\\wsl-swap.vhdx
 
 [experimental]
 # Automatically shrinks the Windows VHDX (virtual disk) file when you delete files in Linux.
