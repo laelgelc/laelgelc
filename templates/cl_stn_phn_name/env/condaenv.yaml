@@ -61,6 +61,7 @@ dependencies:
   - selenium
 #  - spacy
 #  - spyder
+#  - statsmodels
   - tqdm
   - validators
   - wordcloud
@@ -68,6 +69,7 @@ dependencies:
   - yt-dlp
   - pip
   - pip:
+#      - factor_analyzer
 #      - gogettr
       - pymupdf
 #      - truthbrush
