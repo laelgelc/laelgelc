@@ -132,9 +132,9 @@ unset __conda_setup
 # <<< conda initialize <<<
 
 # The following line adds TeX Live to the PATH variable
-export PATH=/usr/local/texlive/2025/bin/x86_64-linux:$PATH
-export MANPATH=/usr/local/texlive/2025/texmf-dist/doc/man:$MANPATH
-export INFOPATH=/usr/local/texlive/2025/texmf-dist/doc/info:$INFOPATH
+export PATH=/usr/local/texlive/2026/bin/x86_64-linux:$PATH
+export MANPATH=/usr/local/texlive/2026/texmf-dist/doc/man:$MANPATH
+export INFOPATH=/usr/local/texlive/2026/texmf-dist/doc/info:$INFOPATH
 
 
 # The following lines add TreeTagger to the PATH variable
