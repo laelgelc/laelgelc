@@ -20,7 +20,7 @@ dependencies:
   - beautifulsoup4
   - bibtexparser
 #  - boto3
-  - cffconvert
+#  - cffconvert
 #  - dash
 #  - demoji
   - deno
