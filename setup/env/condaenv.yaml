@@ -63,6 +63,7 @@ dependencies:
 #  - spacy
 #  - spyder
 #  - statsmodels
+  - tabulate
   - tqdm
   - validators
   - wordcloud
