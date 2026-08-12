@@ -250,12 +250,20 @@ def cmd_commit(repos: List[Path]) -> None:
 def parse_args() -> argparse.Namespace:
     """Parse command-line arguments."""
     parser = argparse.ArgumentParser(
-        description="Manage all Git repositories under the directory where this script is located."
+        description="Manage Git repositories under a chosen base directory."
     )
     parser.add_argument(
         "command",
         choices=["status", "pull", "commit"],
         help="Operation to perform on all discovered repositories.",
+    )
+    parser.add_argument(
+        "--base-dir",
+        default=None,
+        help=(
+            "Directory under which Git repositories should be discovered. "
+            "Defaults to the directory where this script is located."
+        ),
     )
     return parser.parse_args()
 
@@ -263,8 +271,11 @@ def parse_args() -> argparse.Namespace:
 def main() -> None:
     args = parse_args()
 
-    # Base directory: directory where this script resides
-    base_dir = Path(__file__).resolve().parent
+    if args.base_dir is None:
+        base_dir = Path(__file__).resolve().parent
+    else:
+        base_dir = Path(args.base_dir).expanduser().resolve()
+
     print(f"[INFO] Discovering Git repositories under: {base_dir}")
     repos = discover_repos(base_dir)
     print(f"[INFO] Found {len(repos)} repository(ies).")

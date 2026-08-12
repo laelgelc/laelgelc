@@ -142,11 +142,11 @@ conda activate "$CONDA_ENV"
 section "Pulling all Git repositories"
 
 cd "$PROJECTS_DIR"
-python "$GITALL_SCRIPT" pull
+python "$GITALL_SCRIPT" pull --base-dir "$PROJECTS_DIR"
 
 section "Checking Git repository statuses"
 
-python "$GITALL_SCRIPT" status
+python "$GITALL_SCRIPT" status --base-dir "$PROJECTS_DIR"
 
 section "Disk usage after cleanup"
 
