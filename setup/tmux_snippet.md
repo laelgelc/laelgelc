@@ -18,6 +18,13 @@ Detach from `tmux`:
 Ctrl+B
 D
 ```
+List the active sessions:
+```shell script
+tmux ls
+```
+```shell script
+jubilee_speech: 1 windows (created Tue Aug 18 16:56:54 2026)
+```
 Reattach:
 ```shell script
 tmux attach -t jubilee_speech
