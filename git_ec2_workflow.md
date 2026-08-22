@@ -114,3 +114,27 @@ git push origin --delete feature/new_source_name
 * **Local Machine:** Creates branches, writes code, merges completed data.
 * **EC2 Instances:** Check out specific branches, run jobs, push data back to those branches.
 * **Result:** You can run as many EC2 instances simultaneously as you want, and you can keep coding locally all day without ever seeing a Git conflict.
+
+## List branches
+
+**List local branches only:**
+```shell script
+git branch
+```
+
+*(The branch you are currently on will be highlighted with an asterisk `*`)*
+
+**List remote branches only (branches that exist on GitHub/remote repository):**
+```shell script
+git branch -r
+```
+
+**List all branches (both local and remote):**
+```shell script
+git branch -a
+```
+
+**List branches with extra details (shows the last commit message on each branch):**
+```shell script
+git branch -v
+```
