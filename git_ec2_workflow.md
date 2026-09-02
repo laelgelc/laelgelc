@@ -56,6 +56,10 @@ git pull
 git switch -c feature/new_source_name
 ```
 
+Note:
+
+- `git switch -c feature/new_source_name` creates a new branch named feature/new_feature and switches you to that new branch immediately.
+
 Check the branch where you are:
 
 ```shell script
