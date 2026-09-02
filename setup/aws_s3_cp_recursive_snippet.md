@@ -72,3 +72,23 @@ Here is exactly how it decides what to do:
 3. **Downloads Only What's Needed**: It will only download a file if it is missing locally, or if the version on S3 has a different file size or a newer modified timestamp.
 
 This makes `sync` incredibly efficient. If your download gets interrupted halfway through, you can just run the exact same `aws s3 sync` command again. It will instantly skip the 500 files you already downloaded and just resume downloading the rest.
+
+## Step 3: Clean up the bucket
+
+**User**
+
+It's done! How can I clean up the bucket?
+
+**AI Assistant**
+
+To clean up and remove all the files you uploaded to your S3 bucket without deleting the bucket itself, you can use the `rm` command with the `--recursive` flag.
+
+Run this command from either your local machine or the EC2 instance:
+
+```shell script
+aws s3 rm s3://gelc-proc-1/ --recursive
+```
+
+This will go through and delete every file and folder inside the `gelc-proc-1` bucket. 
+
+*(Note: If you actually wanted to delete the entire bucket itself after emptying it, you would use `aws s3 rb s3://gelc-proc-1/ --force`, but usually it's best to just empty it so you can reuse the bucket for the next batch of work!)*
