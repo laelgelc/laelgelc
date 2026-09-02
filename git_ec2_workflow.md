@@ -9,7 +9,7 @@ Since your first EC2 instance is currently running on the `main` branch and expe
 1. **Move your current work to a new branch:**
    On your local machine, immediately create and switch to a new branch for your next source.
 ```shell script
-git checkout -b feature/the_jerusalem_post
+git switch -c feature/the_jerusalem_post
 ```
 
 2. **Develop and commit safely:**
@@ -27,7 +27,7 @@ Once the first EC2 instance completes its job, commits the data, and successfull
 
 1. **Update your local `main`:**
 ```shell script
-git checkout main
+git switch main
 git pull origin main
 ```
 
@@ -35,7 +35,7 @@ git pull origin main
 
 2. **Return to your development branch:**
 ```shell script
-git checkout feature/the_jerusalem_post
+git switch feature/the_jerusalem_post
 ```
 
    *(Optional)* If you want to bring the new data from `main` into your current branch:
@@ -53,9 +53,9 @@ From now on, no EC2 instance should run directly on `main`. You will use the **B
 ### Step 1: Local Development
 Whenever you start a new source, branch off `main`:
 ```shell script
-git checkout main
+git switch main
 git pull origin main
-git checkout -b feature/new_source_name
+git switch -c feature/new_source_name
 ```
 
 Write your code, commit, and push the branch to the remote repository:
@@ -74,7 +74,7 @@ git clone <your-repo-url>
 cd <your-repo>
 
 # Switch to the specific feature branch
-git checkout feature/new_source_name
+git switch feature/new_source_name
 
 # Run your processing script (e.g., using run_python_ec2.sh)
 nohup bash run_python_ec2.sh ...
@@ -93,7 +93,7 @@ git push origin HEAD
 ### Step 3: Merge and Clean Up
 Once the EC2 instance has pushed the processed data, merge it into your main project on your local machine:
 ```shell script
-git checkout main
+git switch main
 git pull origin main
 
 # Merge the completed job
