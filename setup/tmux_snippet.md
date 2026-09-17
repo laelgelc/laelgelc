@@ -1,31 +1,51 @@
-Use `tmux`:
-```shell script
-tmux new -s jubilee_speech
-```
-Inside the session:
-```shell script
-conda activate whisperx_pyannote
-cd ~/cl_st1_carol/cl_st1_ph0_carol
+# `tmux`
 
-python transcribe_jubilee_debates_whisperx.py --no-test-mode
-python align_jubilee_debates_whisperx.py --no-test-mode
-python diarise_jubilee_debates_pyannote.py --no-test-mode
-python assign_speakers_jubilee_debates.py --no-test-mode
-python qc_jubilee_debates_speaker_diarisation.py --no-test-mode
+## Initiate a `tmux` session
+
+```shell
+tmux new -s cl_st1_melina
 ```
-Detach from `tmux`:
-```plain text
+
+## Enable mouse support
+
+```shell
+tmux set -g mouse on
+```
+
+## Split horizontally
+
+```text
+Ctrl+B
+"
+```
+
+## Split vertically
+
+```text
+Ctrl+B
+%
+```
+
+## Detach from a `tmux` session
+```text
 Ctrl+B
 D
 ```
-List the active sessions:
-```shell script
+
+## List the active sessions
+
+```shell
 tmux ls
 ```
-```shell script
-jubilee_speech: 1 windows (created Tue Aug 18 16:56:54 2026)
+
+## Attach to a `tmux` session
+
+```shell
+tmux attach -t cl_st1_melina
 ```
-Reattach:
-```shell script
-tmux attach -t jubilee_speech
-```
+
+## Copy text in `tmux` using the mouse
+
+### Linux
+
+- Hold `Shift` while clicking and dragging the mouse, then press `Ctrl + Shift + c` to copy to your system clipboard.
