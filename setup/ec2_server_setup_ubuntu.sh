@@ -136,7 +136,9 @@ sudo apt install -y \
   ffmpeg \
   tesseract-ocr tesseract-ocr-por tesseract-ocr-spa ocrmypdf \
   software-properties-common \
-  xvfb
+  xvfb \
+  tmux \
+  tmuxinator
 
 # Optional: AWS CLI via snap
 if ! command -v aws >/dev/null 2>&1; then
