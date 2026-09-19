@@ -1,3 +1,81 @@
+# Cheat sheet
+
+## On the EC2 instance
+
+### Creating the EC2 job branch
+
+```shell
+git switch main
+git pull
+```
+
+```shell
+git switch -c feature/ec2_job_1
+git push -u origin feature/ec2_job_1
+```
+
+### Pushing the results
+
+Check for large files
+
+```shell
+find . -type f -size +100M
+```
+
+Push the results
+
+```shell
+git add -A
+git commit -m 'ec2_job_1'
+git push
+```
+
+In case of issues, undo the commit but keep the changes
+
+```shell
+git reset --soft HEAD~1
+```
+
+## On the local machine
+
+### Merging `EC2_job_1`'s results to the main branch
+
+```shell
+git switch main
+git pull
+```
+
+```shell
+git merge origin/feature/ec2_job_1
+```
+
+```shell
+git push
+```
+
+### Safely delete the `feature/ec2_job_1` branch
+
+```shell
+git branch -d feature/ec2_job_1
+```
+
+```shell
+git push origin --delete feature/ec2_job_1
+```
+
+## On the EC2 instance
+
+### Update and clean up
+
+```shell
+git switch main
+git pull
+```
+
+```shell
+git branch -d feature/ec2_job_1
+```
+
 # Git Workflow Guide: Multi-EC2 Processing
 
 This guide ensures you can develop continuously on your local machine while multiple EC2 instances process massive datasets in the background without any Git conflicts.
