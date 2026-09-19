@@ -4,6 +4,8 @@
 
 ### Creating the EC2 job branch
 
+Note: The `env/.tmuxinator.yml` file automates this process.
+
 ```shell
 git switch main
 git pull
