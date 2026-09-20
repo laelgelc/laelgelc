@@ -19,7 +19,7 @@ dependencies:
   - python=3.13.11
   - beautifulsoup4
   - bibtexparser
-  - curl-cffi
+#  - curl-cffi
 #  - boto3
 #  - cffconvert
 #  - dash
