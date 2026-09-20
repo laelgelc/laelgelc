@@ -18,18 +18,18 @@
 #!cl_st1_ph1_ednalvo/**/*.log
 #
 # Usage examples:
-# Case 1 - Using the project's repository
+# Case 1 - Using `laelgelc` repository
+#   bash setup/ec2_server_setup_ubuntu.sh
+#   bash setup/ec2_server_setup_ubuntu.sh --env condaenv.yaml
+#   bash setup/ec2_server_setup_ubuntu.sh --ssh-key
+#   bash setup/ec2_server_setup_ubuntu.sh --env my_other_env.yaml --ssh-key
+#
+# Case 2 - Using the project's repository
 #   cd <ec2_server_setup_ubuntu.sh script location>
 #   bash ec2_server_setup_ubuntu.sh
 #   bash ec2_server_setup_ubuntu.sh --env condaenv.yaml
 #   bash ec2_server_setup_ubuntu.sh --ssh-key
 #   bash ec2_server_setup_ubuntu.sh --env my_other_env.yaml --ssh-key
-#
-# Case 2 - Using `laelgelc` repository
-#   bash setup/ec2_server_setup_ubuntu.sh
-#   bash setup/ec2_server_setup_ubuntu.sh --env condaenv.yaml
-#   bash setup/ec2_server_setup_ubuntu.sh --ssh-key
-#   bash setup/ec2_server_setup_ubuntu.sh --env my_other_env.yaml --ssh-key
 
 set -euo pipefail
 
