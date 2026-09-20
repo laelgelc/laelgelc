@@ -19,3 +19,9 @@ ssh -i laelgelc20260117.pem \
   -o ConnectTimeout=60 \
   ubuntu@
 ```
+
+# Check the Ubuntu version
+
+```bash
+lsb_release -a
+```
