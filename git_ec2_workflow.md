@@ -1,8 +1,19 @@
 # Cheat sheet
 
+## `tmux` and `tmuxinator` usage
+
+### 1. Open a terminal and navigate to where the `.tmuxinator.yml` file is located
+### 2. Run the command:
+
+```shell
+tmuxinator start .
+```
+
+### 3. This will start a new tmux session with the specified windows and panes
+
 ## On the EC2 instance
 
-### Creating the EC2 job branch
+### 1. Creating the EC2 job branch
 
 Note: The `env/.tmuxinator.yml` file automates this process.
 
@@ -16,7 +27,7 @@ git switch -c feature/ec2_job_1
 git push -u origin feature/ec2_job_1
 ```
 
-### Pushing the results
+### 2. Pushing the results
 
 Check for large files
 
@@ -40,7 +51,7 @@ git reset --soft HEAD~1
 
 ## On the local machine
 
-### Merging `EC2_job_1`'s results to the main branch
+### 1. Merging `EC2_job_1`'s results to the main branch
 
 ```shell
 git switch main
@@ -55,7 +66,7 @@ git merge origin/feature/ec2_job_1
 git push
 ```
 
-### Safely delete the `feature/ec2_job_1` branch
+### 2. Safely delete the `feature/ec2_job_1` branch
 
 ```shell
 git branch -d feature/ec2_job_1
@@ -67,7 +78,7 @@ git push origin --delete feature/ec2_job_1
 
 ## On the EC2 instance
 
-### Update and clean up
+### 1. Update and clean up
 
 ```shell
 git switch main
