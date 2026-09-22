@@ -23,6 +23,14 @@ git pull
 ```
 
 ```shell
+conda env list
+```
+
+```shell
+conda activate my_env
+```
+
+```shell
 git switch -c feature/ec2_job_1
 git push -u origin feature/ec2_job_1
 ```
