@@ -76,9 +76,13 @@ git push
 
 ### 2. Safely delete the `feature/ec2_job_1` branch
 
+Only if the branch exists on the local machine:
+
 ```shell
 git branch -d feature/ec2_job_1
 ```
+
+If the merge was successful:
 
 ```shell
 git push origin --delete feature/ec2_job_1
