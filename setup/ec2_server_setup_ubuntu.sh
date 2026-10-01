@@ -32,7 +32,7 @@
 #   bash ec2_server_setup_ubuntu.sh --env my_other_env.yaml --ssh-key
 #
 # Upon the EC2 instance successful setup:
-# - Attach the 'S3-Admin-Access' IAM role to it
+# - Attach the 'S3-Admin-Access' IAM role (Instance Profile) to it
 
 set -euo pipefail
 

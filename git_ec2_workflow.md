@@ -2,7 +2,7 @@
 
 ## Upon the EC2 instance successful setup:
 
-- Attach the 'S3-Admin-Access' IAM role to it
+- Attach the 'S3-Admin-Access' IAM role (Instance Profile) to it.
 
 ## `tmux` and `tmuxinator` usage
 
