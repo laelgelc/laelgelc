@@ -286,6 +286,32 @@ sudo apt install -y firefox libasound2t64 libdbus-glib-1-2 libgtk-3-0t64 libx11-
 echo "--- Firefox Setup Complete ---"
 apt policy firefox || true
 
+echo "--- Starting Chrome Setup ---"
+
+case "$ARCH" in
+  x86_64)
+    CHROME_DEB_ARCH="amd64"
+    ;;
+  aarch64|arm64)
+    CHROME_DEB_ARCH="arm64"
+    ;;
+  *)
+    echo "Unsupported architecture for Google Chrome: $ARCH"
+    exit 1
+    ;;
+esac
+
+CHROME_DEB="/tmp/google-chrome-stable_current_${CHROME_DEB_ARCH}.deb"
+CHROME_URL="https://dl.google.com/linux/direct/google-chrome-stable_current_${CHROME_DEB_ARCH}.deb"
+
+echo "Downloading Google Chrome from: $CHROME_URL"
+wget -O "$CHROME_DEB" "$CHROME_URL"
+
+sudo apt install -y "$CHROME_DEB"
+
+echo "--- Chrome Setup Complete ---"
+google-chrome --version || true
+
 echo "--- GitHub SSH Setup (Optional) ---"
 
 if [[ "$GENERATE_SSH_KEY" = "1" ]]; then
