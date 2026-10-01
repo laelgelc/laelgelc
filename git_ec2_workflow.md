@@ -1,5 +1,9 @@
 # Cheat sheet
 
+## Upon the EC2 instance successful setup:
+
+- Attach the 'S3-Admin-Access' IAM role to it
+
 ## `tmux` and `tmuxinator` usage
 
 ### 1. Open a terminal and navigate to where the `.tmuxinator.yml` file is located

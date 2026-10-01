@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# EC2 Ubuntu 24.04 setup script with Miniconda/conda environment recreation.
+# EC2 Ubuntu 26.04 setup script with Miniconda/conda environment recreation.
 #
 # Features:
 # - Runs from any directory (uses script location for relative paths)
@@ -18,7 +18,7 @@
 #!cl_st1_ph1_ednalvo/**/*.log
 #
 # Usage examples:
-# Case 1 - Using `laelgelc` repository
+# Case 1 - Using `laelgelc` repository (when using the standard 'my_env' environment)
 #   bash setup/ec2_server_setup_ubuntu.sh
 #   bash setup/ec2_server_setup_ubuntu.sh --env condaenv.yaml
 #   bash setup/ec2_server_setup_ubuntu.sh --ssh-key
@@ -30,6 +30,9 @@
 #   bash ec2_server_setup_ubuntu.sh --env condaenv.yaml
 #   bash ec2_server_setup_ubuntu.sh --ssh-key
 #   bash ec2_server_setup_ubuntu.sh --env my_other_env.yaml --ssh-key
+#
+# Upon the EC2 instance successful setup:
+# - Attach the 'S3-Admin-Access' IAM role to it
 
 set -euo pipefail
 
