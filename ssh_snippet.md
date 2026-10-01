@@ -25,3 +25,8 @@ ssh -i laelgelc20260117.pem \
 ```bash
 lsb_release -a
 ```
+
+```bash
+uname -a
+uname -r
+```
