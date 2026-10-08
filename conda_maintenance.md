@@ -64,8 +64,7 @@ read -r -p "Update conda environment 'my_env' from this file? [y/N] " reply
 
 case "$reply" in
     [yY]|[yY][eE][sS])
-        conda activate my_env
-        conda env update --file "$CONDAENV_FILE" --prune --yes
+        conda env update --name my_env --file "$CONDAENV_FILE" --prune
         ;;
     *)
         echo "Skipping conda environment update."
