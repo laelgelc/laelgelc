@@ -185,6 +185,41 @@ else
     esac
 fi
 
+section "Updating Conda environment"
+
+REPO_DIR="$(find "$HOME" -type d -name laelgelc -exec test -d "{}/.git" \; -print -quit)"
+
+if [[ -z "$REPO_DIR" ]]; then
+    echo "Error: Git repository 'laelgelc' was not found under $HOME"
+    exit 1
+fi
+
+CONDAENV_FILE="$REPO_DIR/setup/env/condaenv.yaml"
+
+if [[ ! -f "$CONDAENV_FILE" ]]; then
+    echo "Error: conda environment file was not found:"
+    echo "$CONDAENV_FILE"
+    exit 1
+fi
+
+echo "Repository found:"
+echo "$REPO_DIR"
+echo
+echo "Conda environment file:"
+echo "$CONDAENV_FILE"
+echo
+
+read -r -p "Update conda environment '$CONDA_ENV' from this file? [y/N] " reply
+
+case "$reply" in
+    [yY]|[yY][eE][sS])
+        conda env update --name "$CONDA_ENV" --file "$CONDAENV_FILE" --prune
+        ;;
+    *)
+        echo "Skipping conda environment update."
+        ;;
+esac
+
 section "Disk usage after cleanup"
 
 df -h
