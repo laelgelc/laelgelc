@@ -16,7 +16,7 @@ channels:
   - conda-forge
   - defaults
 dependencies:
-  - python=3.13.11
+  - python=3.13.16
   - beautifulsoup4
   - bibtexparser
 #  - curl-cffi
