@@ -118,24 +118,29 @@ fi
 
 # >>> conda initialize >>>
 # !! Contents within this block are managed by 'conda init' !!
-__conda_setup="$('/home/eyamrog/anaconda3/bin/conda' 'shell.bash' 'hook' 2> /dev/null)"
+__conda_setup="$('/home/eyamrog/miniconda3/bin/conda' 'shell.bash' 'hook' 2> /dev/null)"
 if [ $? -eq 0 ]; then
     eval "$__conda_setup"
 else
-    if [ -f "/home/eyamrog/anaconda3/etc/profile.d/conda.sh" ]; then
-        . "/home/eyamrog/anaconda3/etc/profile.d/conda.sh"
+    if [ -f "/home/eyamrog/miniconda3/etc/profile.d/conda.sh" ]; then
+        . "/home/eyamrog/miniconda3/etc/profile.d/conda.sh"
     else
-        export PATH="/home/eyamrog/anaconda3/bin:$PATH"
+        export PATH="/home/eyamrog/miniconda3/bin:$PATH"
     fi
 fi
 unset __conda_setup
 # <<< conda initialize <<<
 
+# Conda initialization
+# Activate 'my_env' only for interactive shells (such as terminals)
+if [[ $- == *i* ]]; then
+    conda activate my_env
+fi
+
 # The following line adds TeX Live to the PATH variable
 export PATH=/usr/local/texlive/2026/bin/x86_64-linux:$PATH
 export MANPATH=/usr/local/texlive/2026/texmf-dist/doc/man:$MANPATH
 export INFOPATH=/usr/local/texlive/2026/texmf-dist/doc/info:$INFOPATH
-
 
 # The following lines add TreeTagger to the PATH variable
 export PATH=$PATH:/home/eyamrog/treetagger/cmd
