@@ -148,6 +148,43 @@ section "Checking Git repository statuses"
 
 python "$GITALL_SCRIPT" status --base-dir "$PROJECTS_DIR"
 
+section "Checking for newer Conda versions"
+
+conda deactivate || true
+
+current_conda_version="$(conda --version | awk '{print $2}')"
+
+echo "Current conda version: $current_conda_version"
+
+latest_conda_version="$(
+  conda search conda \
+    | awk '/^conda[[:space:]]+/ {print $2}' \
+    | sort -V \
+    | tail -n 1
+)"
+
+if [[ -z "$latest_conda_version" ]]; then
+    echo "Error: could not determine latest conda version" >&2
+    exit 1
+fi
+
+echo "Latest available conda version: $latest_conda_version"
+
+if [[ "$current_conda_version" == "$latest_conda_version" ]]; then
+    echo "Conda is already up to date."
+else
+    read -r -p "Update conda to version $latest_conda_version? [y/N] " reply
+
+    case "$reply" in
+        [yY]|[yY][eE][sS])
+            conda install -n base -c defaults "conda=$latest_conda_version" --yes
+            ;;
+        *)
+            echo "Skipping conda update."
+            ;;
+    esac
+fi
+
 section "Disk usage after cleanup"
 
 df -h
