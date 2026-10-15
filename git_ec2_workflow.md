@@ -260,3 +260,107 @@ git branch -a
 ```shell script
 git branch -v
 ```
+
+## Gracefully interrupting a programme
+
+
+
+### Programme running through `run_python_ec2.sh via `tmux` with no IAM role attached to the EC2 instance
+
+The absence of an IAM role will prevent the EC2 instance from automatically stopping allowing the user to see Python error messages on the still-running EC2 instance.
+
+The best graceful stop is to send **SIGINT** — the same signal as pressing **Ctrl+C**. Your programme catches `KeyboardInterrupt`, closes Selenium, and writes a **partial manifest** before exiting with code `130`.
+
+#### If running in the foreground
+
+If you started it directly in your SSH terminal:
+
+```shell script
+bash run_python_ec2.sh \
+    capture_ao3_lists.py \
+    --no-test-mode \
+    --request-delay 6 \
+    --request-jitter 4 \
+    --max-retries 4 \
+    --retry-delay 20 \
+    --timeout 45
+```
+
+
+press:
+
+```plain text
+Ctrl+C
+```
+
+
+That is the cleanest option.
+
+Expected result:
+
+- current operation is interrupted;
+- Selenium browser is closed;
+- partial manifest is written;
+- `run_python_ec2.sh` then attempts EC2 shutdown because of its `EXIT` trap.
+
+#### If running with `nohup` in the background
+
+If you started it like this:
+
+```shell script
+nohup bash run_python_ec2.sh \
+    capture_ao3_lists.py \
+    --no-test-mode \
+    --request-delay 6 \
+    --request-jitter 4 \
+    --max-retries 4 \
+    --retry-delay 20 \
+    --timeout 45 \
+> process_output.log 2>&1 &
+```
+
+
+first find the process:
+
+```shell script
+ps -ef | grep -E 'run_python_ec2|capture_ao3_lists' | grep -v grep
+```
+
+
+You will likely see both a `bash run_python_ec2.sh ...` process and a `python -u capture_ao3_lists.py ...` process.
+
+For graceful shutdown, send **SIGINT to the Python process**:
+
+```shell script
+kill -INT <python_pid>
+```
+
+
+Example:
+
+```shell script
+kill -INT 12345
+```
+
+
+Then watch the logs:
+
+```shell script
+tail -f process_output.log
+```
+
+
+and/or:
+
+```shell script
+tail -f corpus/01_ao3_list_pages/capture_ao3_lists.log
+```
+
+
+You should see something like:
+
+```plain text
+WARNING Run interrupted by user
+INFO Wrote partial latest manifest: ...
+INFO Wrote partial per-run manifest: ...
+```
