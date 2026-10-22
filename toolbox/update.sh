@@ -220,6 +220,34 @@ case "$reply" in
         ;;
 esac
 
+section "Updating TeX Live"
+
+if command -v tlmgr >/dev/null 2>&1; then
+    TLMGR_PATH="$(command -v tlmgr)"
+
+    echo "tlmgr found:"
+    echo "$TLMGR_PATH"
+    echo
+
+    read -r -p "Update TeX Live packages? [y/N] " reply
+
+    case "$reply" in
+        [yY]|[yY][eE][sS])
+            echo "Updating tlmgr itself..."
+            sudo "$TLMGR_PATH" update --self
+
+            echo "Updating TeX Live packages..."
+            sudo "$TLMGR_PATH" update --all
+            ;;
+        *)
+            echo "Skipping TeX Live update."
+            ;;
+    esac
+else
+    echo "tlmgr was not found in the current user PATH."
+    echo "Skipping TeX Live update."
+fi
+
 section "Disk usage after cleanup"
 
 df -h
