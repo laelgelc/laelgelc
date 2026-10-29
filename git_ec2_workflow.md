@@ -261,9 +261,17 @@ git branch -a
 git branch -v
 ```
 
+## Remove a previously committed file that has become too big for GitHub to accept
+
+**Stop tracking the file while keeping it on your machine**
+
+Example:
+
+```shell script
+git rm --cached corpus/00_sources/ao3_works_metadata/ao3_works_metadata.ndjson
+```
+
 ## Gracefully interrupting a programme
-
-
 
 ### Programme running through `run_python_ec2.sh via `tmux` with no IAM role attached to the EC2 instance
 
