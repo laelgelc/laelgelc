@@ -188,6 +188,18 @@ if ! grep -q "### conda initialize" "$HOME/.bashrc" 2>/dev/null; then
   "$CONDA_DIR/bin/conda" init bash
 fi
 
+# Add Conda environment activation for future interactive shells only
+if ! grep -q "# Activate '${ENV_NAME}' only for interactive shells" "$HOME/.bashrc" 2>/dev/null; then
+  {
+    echo ""
+    echo "# Conda initialization"
+    echo "# Activate '${ENV_NAME}' only for interactive shells (such as terminals)"
+    echo 'if [[ $- == *i* ]]; then'
+    echo "    conda activate ${ENV_NAME}"
+    echo "fi"
+  } >> "$HOME/.bashrc"
+fi
+
 conda config --set always_yes yes --set changeps1 no
 
 echo "--- Accepting Conda Terms of Service if required ---"
