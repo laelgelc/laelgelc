@@ -33,4 +33,8 @@ uname -r
 
 ```bash
 sudo dmidecode -t system
+lscpu | grep "Model name"
+sudo dmidecode -t memory
+sudo lshw -C memory
+sudo inxi -m
 ```
