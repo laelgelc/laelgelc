@@ -30,3 +30,7 @@ lsb_release -a
 uname -a
 uname -r
 ```
+
+```bash
+sudo dmidecode -t system
+```
