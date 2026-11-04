@@ -49,3 +49,24 @@ pandoc <yourfile>.md -o <yourfile>.pdf \
 ```shell
 ffmpeg -i input.ogg output.mp3
 ```
+
+## PDF to PPTX manually with `PowerPoint for the Web` or `LibreOffice`
+
+### Convert the PDF pages
+
+```shell
+pdftoppm -png presentation.pdf slide
+```
+
+This produces:
+
+```shell
+slide-1.png
+slide-2.png
+slide-3.png
+...
+```
+
+Then create a presentation with `PowerPoint for the Web` or `LibreOffice` where each image becomes a slide.
+
+The resulting `.pptx` is visually faithful but not editable.

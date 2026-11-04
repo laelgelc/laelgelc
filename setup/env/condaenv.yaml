@@ -74,7 +74,6 @@ dependencies:
   - pip:
 #      - factor_analyzer
 #      - gogettr
-      - pdf2pptx
       - pymupdf
 #      - truthbrush
 #      - webvtt-py
