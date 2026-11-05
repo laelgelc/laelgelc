@@ -1,0 +1,43 @@
+\section{Lexical Multi-Dimensional Analysis Overview}
+
+Lexical multidimensional analysis (LMDA), an extension of the multidimensional (MD) analysis framework developed by Biber in the 1980s (``multi-feature multidimensional analysis'') to study register variation. Through the identification of (lexical) dimensions or sets of correlated lexical features, LMDA enables the analysis of lexical patterning from a multidimensional perspective. These lexical dimensions represent a variety of latent, macro-level discursive constructs. \parencite[p.1]{berbersardinhaLexicalMultiDimensionalAnalysis2025}
+
+A typical LMDA comprises the procedures described in Figure \ref{fig:lexical_md_analysis_procedures}.
+
+\import{diagrams/}{md_analysis_diagram_lexical_procedures}
+
+\section{Lexical Variable Selection via Keywords}
+
+Figure \ref{fig:lexical_variables_selection_by_keywords} describes the selection of lexical variables.
+
+\import{diagrams/}{lexical_variables_selection_by_keywords}
+
+This process is implemented with two programmes in the LMDA pipeline:
+
+\begin{itemize}
+    \item \textit{keylemmas.py}
+    \item \textit{select\_kws\_stratified.py}
+\end{itemize}
+
+\subsection{\textit{keylemmas.py}}
+
+\textit{keylemmas.py} computes key lemmas from the tagged corpus.
+
+The programme compares each subcorpus against all other subcorpora combined and produces a ranked key-lemma table for each subcorpus.
+
+The output is used by \textit{select\_kws\_stratified.py} to choose a balanced list of positive keywords across decade strata.
+
+Click \href{https://github.com/laelgelc/cl_st1_anna/blob/main/cl_st1_ph2_anna/cl_st1_ph2_anna_pipeline.md#3-extract-key-lemmas-by-group}{\textit{Extract key lemmas by group}} for an example.
+
+\subsection{\textit{select\_kws\_stratified.py}}
+
+\textit{select\_kws\_stratified.py} selects a balanced set of positive keywords from subcorpus-specific key-lemma tables.
+
+It reads the key-lemma tables produced by \textit{keylemmas.py}, extracts lemmas classified as positive keywords (`POSKW'), applies filtering rules, enforces an equal maximum quota per decade, and writes:
+
+\begin{enumerate}
+    \item one selected keyword list per decade
+    \item one consolidated deduplicated keyword list for downstream LMDA processing
+\end{enumerate}
+
+Click \href{https://github.com/laelgelc/cl_st1_anna/blob/main/cl_st1_ph2_anna/cl_st1_ph2_anna_pipeline.md#4-select-a-stratified-keyword-set}{\textit{Select a stratified keyword set}} for an example.
