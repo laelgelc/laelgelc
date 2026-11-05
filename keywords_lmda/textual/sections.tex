@@ -25,7 +25,7 @@ This process is implemented with two programmes in the LMDA pipeline:
 
 The programme compares each subcorpus against all other subcorpora combined and produces a ranked key-lemma table for each subcorpus.
 
-The output is used by \textit{select\_kws\_stratified.py} to choose a balanced list of positive keywords across decade strata.
+The output is used by \textit{select\_kws\_stratified.py} to choose a balanced list of positive keywords across subcorpus strata.
 
 Click \href{https://github.com/laelgelc/cl_st1_anna/blob/main/cl_st1_ph2_anna/cl_st1_ph2_anna_pipeline.md#3-extract-key-lemmas-by-group}{\textit{Extract key lemmas by group}} for an example.
 
@@ -33,10 +33,10 @@ Click \href{https://github.com/laelgelc/cl_st1_anna/blob/main/cl_st1_ph2_anna/cl
 
 \textit{select\_kws\_stratified.py} selects a balanced set of positive keywords from subcorpus-specific key-lemma tables.
 
-It reads the key-lemma tables produced by \textit{keylemmas.py}, extracts lemmas classified as positive keywords (`POSKW'), applies filtering rules, enforces an equal maximum quota per decade, and writes:
+It reads the key-lemma tables produced by \textit{keylemmas.py}, extracts lemmas classified as positive keywords (`POSKW'), applies filtering rules, enforces an equal maximum quota per subcorpus, and writes:
 
 \begin{enumerate}
-    \item one selected keyword list per decade
+    \item one selected keyword list per subcorpus
     \item one consolidated deduplicated keyword list for downstream LMDA processing
 \end{enumerate}
 
