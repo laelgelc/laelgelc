@@ -23,7 +23,7 @@ dependencies:
 #  - boto3
 #  - cffconvert
 #  - dash
-#  - demoji
+  - demoji
   - deno
 #  - folium
 #  - gensim
@@ -43,7 +43,7 @@ dependencies:
   - openai
   - openpyxl
   - pandas
-#  - pandas-stubs # Only useful when 'mypy' is present
+  - pandas-stubs # Only useful when 'mypy' is present or the IDE requires it
 #  - pandoc
   - plotly
   - pyarrow
@@ -58,10 +58,10 @@ dependencies:
   - requests
   - scikit-learn
   - scipy
-#  - scipy-stubs # Only useful when 'mypy' is present
+  - scipy-stubs # Only useful when 'mypy' is present or the IDE requires it
   - seaborn
   - selenium
-#  - spacy
+  - spacy
 #  - spyder
 #  - statsmodels
   - tabulate
