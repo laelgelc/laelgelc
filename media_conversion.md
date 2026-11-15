@@ -50,6 +50,10 @@ pandoc <yourfile>.md -o <yourfile>.pdf \
 ffmpeg -i input.ogg output.mp3
 ```
 
+```shell
+ffmpeg -i input.webp output.png
+```
+
 ## PDF to PPTX manually with `PowerPoint for the Web` or `LibreOffice`
 
 ### Convert the PDF pages
