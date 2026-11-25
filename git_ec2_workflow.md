@@ -60,13 +60,13 @@ ubuntu@ip-172-31-14-194:~/cl_st3_arianne$ find . -type f -size +100M
 ./cl_st3_ph1_arianne/corpus/00_sources/now/03_now_screened/llm_screening_v2_gpt-6-luna/climate_now_screened.ndjson
 ./.git/objects/pack/pack-1a98084f32d8eac18840d5e2345c0370eb384254.pack
 ubuntu@ip-172-31-14-194:~/cl_st3_arianne$ cd ./cl_st3_ph1_arianne/corpus/00_sources/now/03_now_screened/llm_screening_v2_gpt-6-luna
-ubuntu@ip-172-31-14-194:~/cl_st3_arianne/cl_st3_ph1_arianne/corpus/00_sources/now/03_now_screened/llm_screening_v2_gpt-6-luna$ tar -cJf climate_now_screened.tar.gz climate_now_screened.ndjson
+ubuntu@ip-172-31-14-194:~/cl_st3_arianne/cl_st3_ph1_arianne/corpus/00_sources/now/03_now_screened/llm_screening_v2_gpt-6-luna$ tar -cJf climate_now_screened.tar.xz climate_now_screened.ndjson
 ubuntu@ip-172-31-14-194:~/cl_st3_arianne/cl_st3_ph1_arianne/corpus/00_sources/now/03_now_screened/llm_screening_v2_gpt-6-luna$ ll
 total 425032
 drwxrwxr-x  3 ubuntu ubuntu      4096 Nov 25 09:49 ./
 drwxrwxr-x  4 ubuntu ubuntu      4096 Nov 24 21:22 ../
 -rw-------  1 ubuntu ubuntu 318975051 Nov 25 03:09 climate_now_screened.ndjson
--rw-rw-r--  1 ubuntu ubuntu  27319208 Nov 25 09:50 climate_now_screened.tar.gz
+-rw-rw-r--  1 ubuntu ubuntu  27319208 Nov 25 09:50 climate_now_screened.tar.xz
 -rw-rw-r--  1 ubuntu ubuntu  15892945 Nov 25 03:10 llm_screening.log
 -rw-------  1 ubuntu ubuntu         0 Nov 25 03:10 llm_screening_failures.ndjson
 -rw-------  1 ubuntu ubuntu     31133 Nov 25 03:10 llm_screening_invalid_responses.ndjson
@@ -88,7 +88,7 @@ ubuntu@ip-172-31-14-194:~/cl_st3_arianne$ git status | grep climate_now_screened
 ubuntu@ip-172-31-14-194:~/cl_st3_arianne$ 
 ```
 
-Since the large file is now marked as `deleted`, it will be **deleted** in the local machine when the branch is merged to `main`. Uncompress the `.tar.gz` file to recover it the local machine.
+Since the large file is now marked as `deleted`, it will be **deleted** in the local machine when the branch is merged to `main`. Uncompress the `.tar.xz` file to recover it the local machine.
 
 ```shell
 tar -xJf climate_now_screened.tar.xz
