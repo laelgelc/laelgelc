@@ -47,6 +47,29 @@ Check for large files
 find . -type f -size +100M
 ```
 
+How to compress `.tar.xz` large files
+
+```shell
+ubuntu@ip-172-31-14-194:~/cl_st3_arianne$ find . -type f -size +100M
+./cl_st3_ph1_arianne/corpus/00_sources/now/03_now_screened/llm_screening_v2_gpt-6-luna/climate_now_screened.ndjson
+./.git/objects/pack/pack-1a98084f32d8eac18840d5e2345c0370eb384254.pack
+ubuntu@ip-172-31-14-194:~/cl_st3_arianne$
+```
+
+From `~/cl_st3_arianne`, run:
+
+```shell
+tar -cJf climate_now_screened.tar.xz cl_st3_ph1_arianne/corpus/00_sources/now/03_now_screened/llm_screening_v2_gpt-6-luna/climate_now_screened.ndjson
+```
+
+Syntax to create `archive.tar.xz` from `filepath`
+
+```shell
+tar -cJf archive.tar.xz filepath
+```
+
+This creates the archive without deleting the original file.
+
 Push the results
 
 ```shell
