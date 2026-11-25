@@ -49,28 +49,50 @@ find . -type f -size +100M
 
 ---
 
-How to compress `.tar.xz` large files
+How to:
+
+- compress `.tar.xz` large files
+- add them to `.gitignore`
+- stop tracking them in Git
 
 ```shell
 ubuntu@ip-172-31-14-194:~/cl_st3_arianne$ find . -type f -size +100M
 ./cl_st3_ph1_arianne/corpus/00_sources/now/03_now_screened/llm_screening_v2_gpt-6-luna/climate_now_screened.ndjson
 ./.git/objects/pack/pack-1a98084f32d8eac18840d5e2345c0370eb384254.pack
-ubuntu@ip-172-31-14-194:~/cl_st3_arianne$
+ubuntu@ip-172-31-14-194:~/cl_st3_arianne$ cd ./cl_st3_ph1_arianne/corpus/00_sources/now/03_now_screened/llm_screening_v2_gpt-6-luna
+ubuntu@ip-172-31-14-194:~/cl_st3_arianne/cl_st3_ph1_arianne/corpus/00_sources/now/03_now_screened/llm_screening_v2_gpt-6-luna$ tar -cJf climate_now_screened.tar.gz climate_now_screened.ndjson
+ubuntu@ip-172-31-14-194:~/cl_st3_arianne/cl_st3_ph1_arianne/corpus/00_sources/now/03_now_screened/llm_screening_v2_gpt-6-luna$ ll
+total 425032
+drwxrwxr-x  3 ubuntu ubuntu      4096 Nov 25 09:49 ./
+drwxrwxr-x  4 ubuntu ubuntu      4096 Nov 24 21:22 ../
+-rw-------  1 ubuntu ubuntu 318975051 Nov 25 03:09 climate_now_screened.ndjson
+-rw-rw-r--  1 ubuntu ubuntu  27319208 Nov 25 09:50 climate_now_screened.tar.gz
+-rw-rw-r--  1 ubuntu ubuntu  15892945 Nov 25 03:10 llm_screening.log
+-rw-------  1 ubuntu ubuntu         0 Nov 25 03:10 llm_screening_failures.ndjson
+-rw-------  1 ubuntu ubuntu     31133 Nov 25 03:10 llm_screening_invalid_responses.ndjson
+-rw-------  1 ubuntu ubuntu  36455835 Nov 25 03:10 llm_screening_manifest.json
+-rw-rw-r--  1 ubuntu ubuntu      4831 Nov 24 21:22 llm_screening_manifest_20261124T210132Z_876f0616.json
+-rw-------  1 ubuntu ubuntu      4820 Nov 24 21:30 llm_screening_manifest_20261124T213015Z_c4a6a374.json
+-rw-------  1 ubuntu ubuntu     49420 Nov 24 21:32 llm_screening_manifest_20261124T213151Z_e23ba845.json
+-rw-------  1 ubuntu ubuntu  36455835 Nov 25 03:10 llm_screening_manifest_20261124T214247Z_4657683d.json
+-rw-------  1 ubuntu ubuntu       778 Nov 25 03:10 llm_screening_summary.json
+drwxrwxr-x 63 ubuntu ubuntu      4096 Nov 25 03:07 screening_json/
+ubuntu@ip-172-31-14-194:~/cl_st3_arianne/cl_st3_ph1_arianne/corpus/00_sources/now/03_now_screened/llm_screening_v2_gpt-6-luna$ cd ~/cl_st3_arianne
+ubuntu@ip-172-31-14-194:~/cl_st3_arianne$ nano .gitignore
+ubuntu@ip-172-31-14-194:~/cl_st3_arianne$ git status | grep climate_now_screened.ndjson
+	modified:   cl_st3_ph1_arianne/corpus/00_sources/now/03_now_screened/llm_screening_v2_gpt-6-luna/climate_now_screened.ndjson
+ubuntu@ip-172-31-14-194:~/cl_st3_arianne$ git rm --cached -- cl_st3_ph1_arianne/corpus/00_sources/now/03_now_screened/llm_screening_v2_gpt-6-luna/climate_now_screened.ndjson
+rm 'cl_st3_ph1_arianne/corpus/00_sources/now/03_now_screened/llm_screening_v2_gpt-6-luna/climate_now_screened.ndjson'
+ubuntu@ip-172-31-14-194:~/cl_st3_arianne$ git status | grep climate_now_screened.ndjson
+	deleted:    cl_st3_ph1_arianne/corpus/00_sources/now/03_now_screened/llm_screening_v2_gpt-6-luna/climate_now_screened.ndjson
+ubuntu@ip-172-31-14-194:~/cl_st3_arianne$ 
 ```
 
-From `~/cl_st3_arianne`, run:
+Since the large file is now marked as `deleted`, it will be **deleted** in the local machine when the branch is merged to `main`. Uncompress the `.tar.gz` file to recover it the local machine.
 
 ```shell
-tar -cJf climate_now_screened.tar.xz cl_st3_ph1_arianne/corpus/00_sources/now/03_now_screened/llm_screening_v2_gpt-6-luna/climate_now_screened.ndjson
+tar -xJf climate_now_screened.tar.xz
 ```
-
-Syntax to create `archive.tar.xz` from `filepath`
-
-```shell
-tar -cJf archive.tar.xz filepath
-```
-
-This creates the archive without deleting the original file.
 
 ---
 
