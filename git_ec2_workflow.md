@@ -47,6 +47,8 @@ Check for large files
 find . -type f -size +100M
 ```
 
+---
+
 How to compress `.tar.xz` large files
 
 ```shell
@@ -69,6 +71,8 @@ tar -cJf archive.tar.xz filepath
 ```
 
 This creates the archive without deleting the original file.
+
+---
 
 Push the results
 
