@@ -1,212 +1,220 @@
 #!/usr/bin/env bash
-set -euo pipefail
+# Run: bash run_python_ec2.sh [options] -- command [args...]
+# Use --help for options and shutdown/exit behavior.
+set -uo pipefail
 
-# Usage examples:
-#   # Simple: run a script with no extra args
-#   nohup bash run_python_ec2.sh my_script.py > process_output.log 2>&1 &
-#   nohup bash run_python_ec2.sh dummy.py > process_output.log 2>&1 &
-#
-#   # With script arguments
-#   nohup bash run_python_ec2.sh capture_ao3_lists.py --test > process_output.log 2>&1 &
-#   nohup bash run_python_ec2.sh dummy.py --test > process_output.log 2>&1 &
-#
-#   # With script arguments and suitable for long commands
-#   nohup bash run_python_ec2.sh \
-#       transcribe_image_handwriting.py \
-#           --model gpt-5.5 \
-#           --input-dir corpus/01_poc_dataset \
-#           --output-dir corpus/02_extracted \
-#           --no-test-mode \
-#           --workers 4 \
-#   > process_output.log 2>&1 &
-#
-#   # Tail logs in another shell
-#   tail -f process_output.log
-#   tail -f dummy.log
+usage() {
+  cat <<'EOF'
+Usage: bash run_python_ec2.sh [options] -- command [args...]
+  --config PATH          Read settings from PATH instead of the adjacent default.
+  --no-config            Ignore the adjacent default configuration.
+  --dry-run              Do not activate, validate, run, notify, or stop.
+  --no-stop-on-failure   Leave the instance running if setup, validation,
+                         command, or signal handling fails.
+  --stop-on-failure      Request a stop on failure (the default).
+  --conda-env NAME       Activate this Conda environment before running.
+  --conda-sh PATH        Conda shell initialization script (required with --conda-env).
+  --sns-topic-arn ARN    Publish a notification before requesting stop.
+  --sns-region REGION    SNS region (default: region in topic ARN).
+  --validate PATH        Run this executable with the command and its arguments
+                         after activation and before the command.
+  --help                 Show this help; no shutdown is attempted.
 
-# ---------------------------------------------------------------------------
-# Configuration
-# ---------------------------------------------------------------------------
-
-CONDA_ENV_NAME="my_env"  # Change to your environment name
-CONDA_SH="${HOME}/miniconda3/etc/profile.d/conda.sh"  # Adjust if Miniconda/conda is elsewhere
-
-# SNS topic to notify when the instance is about to be stopped.
-# Ensure the instance role has sns:Publish permission on this ARN.
-SNS_TOPIC_ARN="arn:aws:sns:sa-east-1:849468635108:ec2-stop-notifications"
-SNS_REGION="sa-east-1"  # Region of the SNS topic above
-
-# Will be set in main(), used for notifications
-SCRIPT_INVOCATION=""
-
-
-# ---------------------------------------------------------------------------
-# Python runner
-# ---------------------------------------------------------------------------
-
-run_python_program() {
-  if [[ $# -lt 1 ]]; then
-    echo "Usage: $0 <python_program> [args...]" >&2
-    exit 1
-  fi
-
-  local python_program="$1"
-  shift
-  local python_args=("$@")
-
-  if [[ ! -f "$CONDA_SH" ]]; then
-    echo "Error: conda.sh not found at: $CONDA_SH" >&2
-    echo "Update CONDA_SH in this script to match your Miniconda/conda installation." >&2
-    exit 1
-  fi
-
-  # shellcheck disable=SC1090
-  source "$CONDA_SH"
-
-  conda activate "$CONDA_ENV_NAME"
-
-  if [[ "${CONDA_DEFAULT_ENV:-}" != "$CONDA_ENV_NAME" ]]; then
-    echo "Error: conda environment '$CONDA_ENV_NAME' not activated!" >&2
-    exit 1
-  fi
-
-  # -u for unbuffered output (logs stream immediately, useful with nohup)
-  python -u "$python_program" "${python_args[@]}"
-
-  conda deactivate || true
-}
-
-
-# ---------------------------------------------------------------------------
-# EC2 + SNS helper functions
-# ---------------------------------------------------------------------------
-
-get_imds_token() {
-  curl -fsS -X PUT "http://169.254.169.254/latest/api/token" \
-    -H "X-aws-ec2-metadata-token-ttl-seconds: 21600"
-}
-
-imds_get_with_token() {
-  local token path
-  token="$1"
-  path="$2"
-  curl -fsS -H "X-aws-ec2-metadata-token: $token" \
-    "http://169.254.169.254/latest/${path}"
-}
-
-notify_shutdown() {
-  # Sends a notification to SNS that this instance is being stopped.
-  # Expects: $1 = instance_id, $2 = region (instance region)
-  local instance_id="$1"
-  local instance_region="$2"
-
-  # SNS notification is optional: if not configured or aws CLI missing, just skip.
-  if [[ -z "${SNS_TOPIC_ARN:-}" ]]; then
-    echo "Info: SNS_TOPIC_ARN not set; skipping SNS notification." >&2
-    return 0
-  fi
-
-  command -v aws >/dev/null 2>&1 || {
-    echo "Warning: aws CLI not found; skipping SNS notification." >&2
-    return 0
-  }
-
-  local sns_region="${SNS_REGION:-}"
-  if [[ -z "$sns_region" ]]; then
-    # Fallback: try to extract region from ARN (4th colon-separated field)
-    # arn:partition:service:region:account-id:resource
-    sns_region="$(echo "$SNS_TOPIC_ARN" | awk -F: '{print $4}')"
-  fi
-
-  if [[ -z "$sns_region" ]]; then
-    echo "Warning: SNS region could not be determined; skipping SNS notification." >&2
-    return 0
-  fi
-
-  local subject="EC2 instance stopping: ${instance_id}"
-  local message
-  message=$(
-    cat <<EOF
-EC2 instance is being stopped.
-
-Instance ID : ${instance_id}
-Instance Region : ${instance_region}
-SNS Region : ${sns_region}
-
-Script invocation:
-${SCRIPT_INVOCATION}
+By default a valid invocation requests an EC2 stop even if the command fails.
+IMDSv2, curl, the AWS CLI and EC2 stop permissions are required; SNS publish
+permission is also required if configured. A notification failure is reported
+but does not prevent the stop request. Exit status is the command/setup/signal
+status if nonzero, otherwise 1 if notification or shutdown failed, otherwise 0.
+The dry run prints no command arguments. Neither SNS nor launcher messages
+include command arguments. The command and validation hook may log them.
+An optional run_python_ec2.conf next to the launcher is read as literal
+KEY=VALUE data, not shell code. CLI options override configuration settings.
 EOF
-  )
-
-  # Fire-and-forget notification
-  aws sns publish \
-    --region "$sns_region" \
-    --topic-arn "$SNS_TOPIC_ARN" \
-    --subject "$subject" \
-    --message "$message" >/dev/null 2>&1 || {
-      echo "Warning: failed to publish shutdown notification to SNS." >&2
-    }
 }
+
+dry_run=0
+no_stop_on_failure=0
+conda_env= conda_sh= sns_topic= sns_region= validator=
+script_dir=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd -P) || exit 2
+config_path=$script_dir/run_python_ec2.conf
+config_explicit=0
+config_disabled=0
+# Locate configuration before parsing overrides; stop at the workload boundary.
+args=("$@")
+for ((i=0; i<${#args[@]}; i++)); do
+  case ${args[i]} in
+    --) break ;;
+    --config)
+      if ((i + 1 >= ${#args[@]})) || [[ -z ${args[i+1]} || ${args[i+1]} == --* ]]; then
+        printf 'Missing value for --config\n' >&2; exit 2
+      fi
+      ((i+=1)); config_path=${args[i]}; config_explicit=1; config_disabled=0 ;;
+    --no-config) config_disabled=1; config_explicit=0 ;;
+    --conda-env|--conda-sh|--sns-topic-arn|--sns-region|--validate) ((i+=1)) ;;
+  esac
+done
+if ((!config_disabled)); then
+  if [[ -e $config_path || -L $config_path ]]; then
+    if [[ ! -f $config_path || ! -r $config_path ]]; then
+      printf 'Cannot read configuration: %s\n' "$config_path" >&2; exit 2
+    fi
+    config_dir=$(cd -- "$(dirname -- "$config_path")" && pwd -P) || exit 2
+    declare -A config_seen=()
+    line_number=0
+    while IFS= read -r line || [[ -n $line ]]; do
+      ((line_number+=1))
+      [[ $line =~ ^[[:space:]]*$ || $line =~ ^[[:space:]]*# ]] && continue
+      if [[ ! $line =~ ^([a-z_]+)=(.*)$ ]]; then
+        printf 'Invalid configuration line %s\n' "$line_number" >&2; exit 2
+      fi
+      key=${BASH_REMATCH[1]} value=${BASH_REMATCH[2]}
+      if [[ -n ${config_seen[$key]+set} ]]; then
+        printf 'Duplicate configuration key: %s\n' "$key" >&2; exit 2
+      fi
+      config_seen[$key]=1
+      case $key in
+        conda_env) conda_env=$value ;;
+        conda_sh) conda_sh=$value; [[ -z $value || $value == /* ]] || conda_sh=$config_dir/$value ;;
+        sns_topic_arn) sns_topic=$value ;;
+        sns_region) sns_region=$value ;;
+        validate) validator=$value; [[ -z $value || $value == /* ]] || validator=$config_dir/$value ;;
+        stop_on_failure)
+          case $value in true) no_stop_on_failure=0 ;; false) no_stop_on_failure=1 ;;
+            *) printf 'Invalid stop_on_failure value\n' >&2; exit 2 ;; esac ;;
+        *) printf 'Unknown configuration key: %s\n' "$key" >&2; exit 2 ;;
+      esac
+    done < "$config_path"
+  elif ((config_explicit)); then
+    printf 'Configuration not found: %s\n' "$config_path" >&2; exit 2
+  fi
+fi
+while (($#)); do
+  case "$1" in
+    --help) usage; exit 0 ;;
+    --dry-run) dry_run=1; shift ;;
+    --no-stop-on-failure) no_stop_on_failure=1; shift ;;
+    --stop-on-failure) no_stop_on_failure=0; shift ;;
+    --no-config) shift ;;
+    --config) shift 2 ;;
+    --conda-env|--conda-sh|--sns-topic-arn|--sns-region|--validate)
+      option=$1
+      if (($# < 2)) || [[ -z $2 || $2 == --* ]]; then
+        printf 'Missing value for %s\n' "$option" >&2; exit 2
+      fi
+      case "$option" in
+        --conda-env) conda_env=$2 ;;
+        --conda-sh) conda_sh=$2 ;;
+        --sns-topic-arn) sns_topic=$2 ;;
+        --sns-region) sns_region=$2 ;;
+        --validate) validator=$2 ;;
+      esac
+      shift 2 ;;
+    --) shift; break ;;
+    *) printf 'Unknown option: %s\n' "$1" >&2; usage >&2; exit 2 ;;
+  esac
+done
+if (($# == 0)) || [[ -z $1 ]]; then
+  printf 'A command is required after --.\n' >&2; exit 2
+fi
+if [[ -n $conda_env && -z $conda_sh || -z $conda_env && -n $conda_sh ]]; then
+  printf 'Both --conda-env and --conda-sh are required together.\n' >&2; exit 2
+fi
+if ((dry_run)); then
+  printf 'Dry run: command, validation, environment activation, SNS and EC2 stop skipped.\n'
+  exit 0
+fi
 
 stop_instance() {
-  # Prerequisites (when used on EC2):
-  # - aws CLI installed
-  # - IAM role attached that allows:
-  #   - ec2:StopInstances on this instance
-  #   - sns:Publish on the configured SNS topic
-  command -v aws >/dev/null 2>&1 || {
-    echo "Warning: aws CLI not found; not stopping instance." >&2
-    return 0
-  }
-
-  local token instance_id region
-  token="$(get_imds_token)" || {
-    echo "Warning: failed to get IMDS token; not stopping instance." >&2
-    return 0
-  }
-
-  instance_id="$(imds_get_with_token "$token" "meta-data/instance-id")" || return 0
-  region="$(imds_get_with_token "$token" "meta-data/placement/region")" || true
-
-  if [[ -z "${region:-}" ]]; then
-    region="${AWS_REGION:-${AWS_DEFAULT_REGION:-}}"
+  local status=$1 token instance_id region topic_region result=0 action
+  if ! command -v curl >/dev/null || ! command -v aws >/dev/null; then
+    printf 'Error: curl and AWS CLI are required to stop the instance.\n' >&2
+    return 1
   fi
-  if [[ -z "${region:-}" ]]; then
-    echo "Warning: AWS region could not be determined; not stopping instance." >&2
-    return 0
+  if ! token=$(curl -fsS --connect-timeout 2 --max-time 5 -X PUT \
+      http://169.254.169.254/latest/api/token \
+      -H 'X-aws-ec2-metadata-token-ttl-seconds: 21600') || [[ -z $token ]]; then
+    printf 'Error: unable to obtain IMDSv2 token; instance not stopped.\n' >&2; return 1
   fi
-
-  # Try to send SNS notification first (non-fatal if it fails)
-  notify_shutdown "$instance_id" "$region" || true
-
-  # Then request instance stop
-  aws ec2 stop-instances --region "$region" --instance-ids "$instance_id" >/dev/null || true
-  echo "Instance $instance_id stop requested in region $region."
+  if ! instance_id=$(curl -fsS --connect-timeout 2 --max-time 5 \
+      -H "X-aws-ec2-metadata-token: $token" \
+      http://169.254.169.254/latest/meta-data/instance-id) || [[ ! $instance_id =~ ^i-[a-zA-Z0-9]+$ ]]; then
+    printf 'Error: unable to obtain a valid instance ID; instance not stopped.\n' >&2; return 1
+  fi
+  region=$(curl -fsS --connect-timeout 2 --max-time 5 \
+      -H "X-aws-ec2-metadata-token: $token" \
+      http://169.254.169.254/latest/meta-data/placement/region) || region=
+  region=${region:-${AWS_REGION:-${AWS_DEFAULT_REGION:-}}}
+  if [[ ! $region =~ ^[a-z0-9-]+$ ]]; then
+    printf 'Error: unable to determine instance region; instance not stopped.\n' >&2; return 1
+  fi
+  action='a stop will be requested'
+  if ((no_stop_on_failure && status != 0)); then
+    action='the instance will be left running'
+  fi
+  if [[ -n $sns_topic ]]; then
+    topic_region=$sns_region
+    if [[ -z $topic_region ]]; then
+      IFS=: read -r _ _ _ topic_region _ <<< "$sns_topic"
+    fi
+    if [[ ! $topic_region =~ ^[a-z0-9-]+$ ]]; then
+      printf 'Error: unable to determine SNS region.\n' >&2; result=1
+    elif ! aws sns publish --region "$topic_region" --topic-arn "$sns_topic" \
+        --subject 'EC2 job finished' \
+        --message "EC2 job on $instance_id in $region finished with exit status $status; $action." >/dev/null; then
+      printf 'Error: SNS notification failed.\n' >&2; result=1
+    fi
+  fi
+  if ((no_stop_on_failure && status != 0)); then
+    printf 'Failure: leaving instance running as requested.\n' >&2
+    return "$result"
+  fi
+  if aws ec2 stop-instances --region "$region" --instance-ids "$instance_id" >/dev/null; then
+    printf 'Stop requested for instance %s in %s.\n' "$instance_id" "$region"
+  else
+    printf 'Error: EC2 stop request failed.\n' >&2; result=1
+  fi
+  return "$result"
 }
 
-
-# ---------------------------------------------------------------------------
-# Main
-# ---------------------------------------------------------------------------
-
-main() {
-  # Capture how this script was invoked (for inclusion in the SNS message)
-  SCRIPT_INVOCATION="$0 $*"
-
-  # Always attempt to stop the instance when this script exits (success or failure).
-  # If you only want to stop on success, move stop_instance after run_python_program
-  # and remove this trap.
-  #
-  # For instance:
-  #   main() {
-  #     SCRIPT_INVOCATION="$0 $*"
-  #     if run_python_program "$@"; then
-  #       stop_instance
-  #     fi
-  #   }
-  trap stop_instance EXIT
-
-  run_python_program "$@"
+child=
+on_signal() {
+  local signal=$1 status=$2
+  trap '' INT TERM HUP
+  if [[ -n $child ]]; then
+    kill -s "$signal" "$child" 2>/dev/null || :
+    wait "$child" 2>/dev/null || :
+    child=
+  fi
+  exit "$status"
 }
+finish() {
+  local status=$?
+  trap - EXIT
+  trap '' INT TERM HUP
+  if ! stop_instance "$status"; then
+    if ((status == 0)); then status=1; fi
+  fi
+  exit "$status"
+}
+trap finish EXIT
+trap 'on_signal INT 130' INT
+trap 'on_signal TERM 143' TERM
+trap 'on_signal HUP 129' HUP
 
-main "$@"
+if [[ -n $conda_env ]]; then
+  if [[ ! -f $conda_sh ]] || ! source "$conda_sh" || ! conda activate "$conda_env"; then
+    printf 'Error: Conda activation failed.\n' >&2; exit 1
+  fi
+fi
+run_child() {
+  "$@" &
+  child=$!
+  local status=0
+  wait "$child" || status=$?
+  child=
+  return "$status"
+}
+if [[ -n $validator ]]; then
+  run_child "$validator" "$@" || exit $?
+fi
+run_child "$@"
